@@ -1,0 +1,32 @@
+body {
+	font-family: verdana, tahoma, arial, sans-serif;
+	font-size: 10pt;
+	margin: 20px 30px 20px 20px;
+}
+
+.ext {
+	color: red;
+}
+
+h1 {
+	border-bottom: 1px solid #888;
+}
+
+#info {
+	background: #eee;
+	border: 1px solid #aaa;
+	padding: 5px;
+}
+
+#translations {
+	display: none;
+}
+
+span.img span {
+	display: none;
+}
+span.img {
+	display: none;
+}
+
+
