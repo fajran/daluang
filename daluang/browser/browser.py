@@ -7,12 +7,13 @@ import sys
 import urllib
 import webbrowser
 import os
+import re
 
 from daluang import Parser, Reader, Locator, Config
 
 class Browser:
 	def __init__(self, base_addr):
-		self.base_addr = base_addr
+		self.base_addr = base_addr.strip(' /')
 
 		self.config = Config()
 		self.config.init()
@@ -22,6 +23,8 @@ class Browser:
 
 		self.__init_gui()
 		self.__init_signal()
+
+		self.re_article = re.compile(r'([^/]+)/article/([^/]+)(/|$)')
 
 	def __init_gui(self):
 		self.window = self.glade.get_widget("window")
@@ -62,14 +65,15 @@ class Browser:
 		self.__update_button()
 
 	def __on_ok_clicked(self, src):
-		print "search"
+		text = self.txt_article.get_text()
+		self.open(text)
 
 	def __on_home_clicked(self, src):
 		self.browser.load_url(self.base_addr)
 
 	def __on_article_changed(self, src):
 		text = src.get_text()
-		self.main.search(text)
+		self.open(text)
 
 	def __on_browser_changed(self, src):
 		self.__update_button()
@@ -82,8 +86,23 @@ class Browser:
 	def main(self):
 		gtk.main()
 
+	def open(self, article):
+		article = article.strip()
+		if len(article) == 0:
+			return
 
-if __name__ == "__main__":
-	b = Browser("http://localhost:8000/")
-	b.main()
+		curr = self.browser.get_location()
+
+		skip = len(self.base_addr)
+		path = curr[skip:].strip('/ ')
+		match = self.re_article.match(path)
+
+		if match:
+			lang = match.group(1)
+			url = "%s/%s/article/%s" % (self.base_addr, lang, article)
+			self.open_url(url)
+
+	def open_url(self, url):
+		self.browser.load_url(url)
+		
 
