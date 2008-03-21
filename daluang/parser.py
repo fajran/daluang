@@ -335,7 +335,11 @@ class Parser:
 	#
 
 	def __parse_link(self, text):
+		text = text.strip()
 		m = self.link_internal_re.match(text)
+
+		if not m:
+			return ''
 
 		url = m.group(1)
 		label = m.group(6)
@@ -368,7 +372,11 @@ class Parser:
 			return '<a href="%s" class="int">%s</a>' % (self.url_base_article + url, label)
 
 	def __parse_elink(self, text):
+		text = text.strip()
 		m = self.link_external_re.match(text)
+
+		if not m:
+			return ''
 
 		url = m.group(1)
 		label = m.group(3)

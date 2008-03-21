@@ -144,6 +144,9 @@ class Converter:
 			self.__flush()
 			print "%d entries processed." % entries
 
+		for key in metadata:
+			self.__add_info(key, metadata[key])
+
 		self.db.commit()
 		self.db.close()
 
