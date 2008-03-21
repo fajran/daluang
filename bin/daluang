@@ -3,9 +3,6 @@
 import sys
 from daluang import Config, Converter, Reader, Locator
 
-conf = Config()
-conf.init()
-
 #
 # Usage
 #
@@ -43,11 +40,13 @@ def usage_help():
 # Index
 #
 def cmd_convert():
-	if len(sys.argv) < 3:
+	if len(sys.argv) < 5:
 		usage_convert()
 		sys.exit(1)
 
-	input = sys.argv[2];
+	language = sys.argv[2];
+	code = sys.argv[3];
+	input = sys.argv[4];
 
 	if input.endswith('.xml.bz2'):
 		base = input[:-8]
@@ -56,36 +55,38 @@ def cmd_convert():
 	else:
 		base = input
 
-	data = base + ".data"
-	toc = base + ".toc"
-	block = base + ".block"
+	output = base + ".data"
 
-	converter = Converter(input, data, toc, block)
+	converter = Converter(input, output)
+	converter.set_language(language)
+	converter.set_code(code)
 	converter.convert()
 	
 
 def usage_convert():
-	print """Usage: daluang convert <data>
+	print """Usage: daluang convert <language> <code> <data>
 
 <data> is an XML database dump of Wikipedia. 
 Usually it is written in the following format:
 
-    idwiki-20080213-pages-articles.xml.bz2"""
+    idwiki-20080213-pages-articles.xml.bz2
+	
+Example usage:
+
+    daluang convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2"""
 
 #
 # Read
 #
 def cmd_read():
-	if len(sys.argv) < 6:
+	if len(sys.argv) < 4:
 		usage_read()
 		sys.exit(1)
 
 	data = sys.argv[2]
-	toc = sys.argv[3]
-	block = sys.argv[4]
-	title = sys.argv[5]
+	title = sys.argv[3]
 
-	r = Reader(data, toc, block)
+	r = Reader(data)
 	result = r.read(title)
 	if result == None:
 		print "Not found: %s" % title
@@ -95,7 +96,7 @@ def cmd_read():
 
 def usage_read():
 	# TODO
-	print "Usage: daluang read <datafile> <tocfile> <blockfile> <title>"
+	print "Usage: daluang read <datafile> <title>"
 	pass
 
 #

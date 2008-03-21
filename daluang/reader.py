@@ -2,42 +2,55 @@
 
 import bz2
 import os
+import sqlite3
 
 class Reader:
 
-	def __init__(self, index_file, toc_file, block_file):
-		self.index_file = index_file
-		self.toc_file = toc_file
-		self.block_file = block_file
+	def __init__(self, data_file):
+		self.data_file = data_file
 
-		self.blocks = { }
+		self.db = sqlite3.connect(self.data_file)
+		self.dbc = self.db.cursor()
 
-		f = open(self.block_file)
-		for line in f:
-			p = line.strip().split(" ")
-			self.blocks[int(p[0])] = [int(p[1]), int(p[2])]
-		f.close()
+		self.last_block = None
+		self.last_data = None
 
-	def get_block(self, block):
-		block_start = self.blocks[block][0]
-		block_length = self.blocks[block][1]
-		return block_start, block_length
+	def read_info(self, key):
+		values = (key,)
+		self.dbc.execute('select key, value from info where key=?', values)
 
-	def read_data(self, block_start, block_length, offset, length):
-		
-		f = open(self.index_file)
-		f.seek(block_start)
-		data = f.read(block_length)
-		f.close()
+		row = self.dbc.fetchone()
+		if row:
+			return row[1]
+		else:
+			return None
 
-		f = open('/tmp/test', 'w')
-		f.write(data)
-		f.close()
+	def read_namespace(self, key):
+		values = (key,)
+		self.dbc.execute('select key, namespace from namespaces where key=?', values)
+
+		row = self.dbc.fetchone()
+		if row:
+			return row[1]
+		else:
+			return None
+
+	def read_data(self, block, offset, length):
+			
+		if block != self.last_block:
+			values = (block,)
+			self.dbc.execute('select block, data from data where block=?', values)
+			row = self.dbc.fetchone()
+
+			if row:
+				data = row[1]
+				data = bz2.decompress(data)
+
+				self.last_data = data
+				self.last_block = block
 
 		end = offset + length
-		data = bz2.decompress(data)
-		data = data[offset:end]
-
+		data = self.last_data[offset:end]
 		pos = data.index("\n")
 		title = data[0:pos]
 		content = data[pos+1:]
@@ -51,77 +64,18 @@ class Reader:
 
 		block, offset, length = loc
 
-		block_start, block_length = self.get_block(block)
-
-		return self.read_data(block_start, block_length, offset, length)
+		return self.read_data(block, offset, length)
 
 	def find(self, title):
 	
-		offset = -1
-		length = -1
-
-		title = title.lower().replace('_', ' ')
+		title = title.strip().lower().replace('_', ' ')
 	
-		f = open(self.toc_file)
-		f.seek(0, 2)
-		size = f.tell()
+		self.dbc.execute('select title, block, start, length from titles where title=?', (title,))
 
-		low = 0
-		high = size
-		pos = size / 2
-
-		# Binary search
-		while True:
-			f.seek(pos)
-			f.readline()
-			pos = f.tell()
-			line = f.readline()
-			line = line.strip().lower()
-
-			p = line.split("\t")
-
-			if p[0] == title:
-				block = int(p[1])
-				offset = int(p[2])
-				length = int(p[3])
-				break
-
-			elif p[0] < title:
-				low = pos - 100
-				pos = (low + high) / 2
-			else:
-				high = pos + 100
-				pos = (low + high) / 2
-
-			if high - low < 2048:
-				low = low - 1024
-				if low < 0:
-					low = 0
-					
-				f.seek(low)
-				f.readline()
-				cnt = 0
-				while f.tell() <= high:
-					p = f.tell()
-					line = f.readline()
-					if line == '':
-						break
-
-					line = line.strip().lower()
-					p = line.split("\t")
-		
-					if p[0] == title:
-						block = int(p[1])
-						offset = int(p[2])
-						length = int(p[3])
-						break
-
-				break
-					
-		f.close()
-	
-		if offset == -1:
+		row = self.dbc.fetchone()
+		if row:
+			return row[1], row[2], row[3]
+		else:
 			return None
 
-		return block, offset, length
 

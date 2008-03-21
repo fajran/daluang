@@ -7,6 +7,13 @@ from django.template import Context
 from django.conf.urls.defaults import *
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
+search_enabled = False
+try:
+	from daluang.search import Finder
+	search_enabled = True
+except ImportError:
+	pass
+
 config = Config()
 config.init()
 
@@ -55,9 +62,53 @@ def article(req, lang, article):
 
 	return HttpResponse(html)
 
-def search(req, lang):
-	html = "search: lang=%s" % (lang)
+def search(req, lang, keywords=None):
+	if search_enabled == False:
+		template = get_template('search_disabled.html')
+		html = template.render(Context({
+			'languages': data.values()
+		}))
+		return HttpResponse(html)
+
+	if keywords == None or keywords.strip() == "":
+		template = get_template('search_form.html')
+		html = template.render(Context({
+			'languages': data.values()
+		}))
+		return HttpResponse(html)
+	
+	db = ""
+	stemmer = ""
+
+	finder = Finder(db, stemmer)
+	result = finder.find(keywords)
+
+	data = []
+
+	for item in result:
+		rank = item[0]
+		percent = item[1]
+		id = item[2]
+		data = item[3]
+	
+		p = data.split("\t")
+		title = p[1]
+		p = p[0].split(" ")
+		block_start = int(p[0])
+		block_length = int(p[1])
+		start = int(p[2])
+		length = int(p[3])
+
+		data.append([id, percent, rank, title])
+	
+	template = get_template('search_result.html')
+	html = template.render(Context({
+		'languages': data.values(),
+		'result': data
+	}))
 	return HttpResponse(html)
+		
+
 
 def res(req, lang, res):
 	html = "res: lang=%s, res=%s" % (lang, res)
@@ -101,7 +152,6 @@ def load_data():
 
 def load_reader(lang):
 	global data
-	global data_dir
 
 	if data == None:
 		load_data()
@@ -114,10 +164,7 @@ def load_reader(lang):
 		reader[lang]
 	except KeyError:
 		info = data[lang]
-		data_file = os.path.join(data_dir, info['files'][0])
-		toc_file = os.path.join(data_dir, info['files'][1])
-		block_file = os.path.join(data_dir, info['files'][2])
-		reader[lang] = Reader(data_file, toc_file, block_file)
+		reader[lang] = Reader(info['datafile'])
 	
 	return reader[lang]
 

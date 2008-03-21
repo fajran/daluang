@@ -3,40 +3,66 @@
 import bz2
 import re
 import os
+import sqlite3
+import sys
 
 class Converter:
 	
-	def __init__(self, input, output_data, output_toc, output_block):
+	def __init__(self, input, output):
 		self.input = input
-		self.output_data = output_data
-		self.output_toc = output_toc
-		self.output_toc_tmp = output_toc + ".tmp"
-		self.output_block = output_block
+		self.output = output
+
+		self.info_code = "en"
+		self.info_language = "English"
 
 	def __flush(self):
 		data = bz2.compress(self.buffer)
-		self.buffer = ""
 
-		block_start = self.fout.tell()
-		self.fout.write(data)
-		block_end = self.fout.tell()
-
-		length = block_end - block_start
-		self.fblock.write("%d %d %d\n" % (self.block_number, block_start, length))
+		self.__add_data(self.block_number, data)
 
 		self.block_number += 1
+		self.buffer = ""
+
+	def __add_data(self, block_number, data):
+		values = (block_number, sqlite3.Binary(data))
+		self.dbc.execute('''INSERT INTO data VALUES (?, ?)''', values)
+
+	def __add_toc(self, title, block_number, start, length):
+		values = (title.strip().lower(), block_number, start, length)
+		self.dbc.execute('''INSERT INTO titles VALUES (?, ?, ?, ?)''', values)
+
+	def __add_namespace(self, key, namespace):
+		values = (int(key), namespace)
+		self.dbc.execute('''INSERT INTO namespaces VALUES (?, ?)''', values)
+
+	def __add_info(self, key, value):
+		values = (key, value)
+		self.dbc.execute('''INSERT INTO info VALUES (?, ?)''', values)
+
+	def set_code(self, code):
+		self.info_code = code
+	
+	def set_language(self, language):
+		self.info_language = language
 
 	def convert(self):
 		
 		fin = bz2.BZ2File(self.input, "r")
-		ftoctmp = open(self.output_toc_tmp, "w")
-		self.fout = open(self.output_data, "w")
-		self.fblock = open(self.output_block, "w")
+		self.db = sqlite3.connect(self.output)
+		self.dbc = self.db.cursor()
+
+		self.dbc.execute('''CREATE TABLE data (block INTEGER, data BLOB)''')
+		self.dbc.execute('''CREATE TABLE titles (title STRING, block INTEGER, start INTEGER, length INTEGER)''')
+		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER, namespace STRING)''')
+		self.dbc.execute('''CREATE TABLE info (key STRING, value STRING)''')
 
 		print "Input: %s" % self.input
-		print "Output data: %s" % self.output_data
-		print "Output table of contents: %s" % self.output_toc
-		print "Output block info: %s" % self.output_block
+		print "Output: %s" % self.output
+		print "Language: %s" % self.info_language
+		print "Code: %s" % self.info_code
+
+		self.__add_info("language", self.info_language)
+		self.__add_info("code", self.info_code)
 
 		max_block_size = 900 * 1024
 
@@ -49,6 +75,11 @@ class Converter:
 		entries = 0
 		entries_step = 1024
 
+		content_start = False
+
+		metadata = {}
+		meta_namespace_re = re.compile('<namespace key="([^"]+)">([^<]+)</namespace>')
+
 		while True:
 			line = fin.readline()
 	
@@ -56,10 +87,19 @@ class Converter:
 				break
 			
 			line_strip = line.strip()
+
+			if not content_start:
+				if line_strip.startswith('<base>'):
+					metadata['base'] = line_strip[6:-7]
+				elif line_strip.startswith('<namespace key'):
+					match = meta_namespace_re.match(line_strip)
+					if match:
+						self.__add_namespace(match.group(1), match.group(2))
 	
 			if line_strip.startswith('<title>') and line_strip.endswith('</title>'):
 				title = line_strip[7:-8]
 				content = ""
+				content_start = True
 				continue
 	
 			if line_strip.startswith('<text'):
@@ -91,7 +131,7 @@ class Converter:
 
 				length = end - start
 
-				ftoctmp.write("%s\t%d\t%d\t%d\n" % (title.lower(), self.block_number, start, length))
+				self.__add_toc(title, self.block_number, start, length)
 					
 				complete = False
 				in_content = False
@@ -104,28 +144,8 @@ class Converter:
 			self.__flush()
 			print "%d entries processed." % entries
 
-		ftoctmp.close()
-		self.fblock.close()
-		self.fout.close()
-
-		print "Data extraction done."
-		print "Sorting index..",
-
-		f = open(self.output_toc_tmp)
-		list = []
-		for line in f:
-			list.append(line.strip())
-
-		f.close()
-
-		list.sort()
-	
-		f = open(self.output_toc, "w")
-		for item in list:
-			f.write("%s\n" % item)
-		f.close()
-
-		os.remove(self.output_toc_tmp)
+		self.db.commit()
+		self.db.close()
 
 		print "done."
 

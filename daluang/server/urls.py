@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	(r'^\+res/(?P<path>.*)$', 'django.views.static.serve', {'document_root': res_dir}),
 	(r'^([^/]+)/article/(.+)?$', handler.article),
 	(r'^([^/]+)/search$', handler.search),
+	(r'^([^/]+)/search/(.+)$', handler.search),
 	(r'^([^/]+)/(.+)?$', handler.misc),
 	(r'^/?$', handler.index),
 )
