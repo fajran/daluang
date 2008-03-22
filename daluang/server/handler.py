@@ -2,18 +2,12 @@
 
 import os
 from daluang import Config, Reader, Parser, Locator
+from daluang.search import Finder
 from django.template.loader import get_template
 from django.template import Context
 from django.conf.urls.defaults import *
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
 import re
-
-search_enabled = False
-try:
-	from daluang.search import Finder
-	search_enabled = True
-except ImportError:
-	pass
 
 config = Config()
 config.init()
@@ -117,6 +111,8 @@ class Handler:
 		return HttpResponseNotFound(html)
 	
 	def serve_misc(self, req, lang, item):
+		if not lang in self.languages:
+			return HttpResponseRedirect('/')
 	
 		html = ""
 		if item == None:
@@ -134,13 +130,11 @@ class Handler:
 		return HttpResponse(html)
 	
 	def serve_search(self, req, lang, keywords=None):
-		if search_enabled == False:
-			template = get_template('search_disabled.html')
-			html = template.render(Context({
-				'languages': data.values()
-			}))
-			return HttpResponse(html)
-	
+		if not lang in self.languages:
+			return HttpResponseRedirect('/')
+
+		keywords = self.__filter_article(keywords)
+
 		if keywords == None or keywords.strip() == "":
 			template = get_template('search_form.html')
 			html = template.render(Context({
@@ -148,33 +142,37 @@ class Handler:
 			}))
 			return HttpResponse(html)
 		
+		reader = self.__load_reader(lang)
+			
 		db = ""
 		stemmer = ""
 	
-		finder = Finder(db, stemmer)
+		finder = Finder(reader)
 		result = finder.find(keywords)
 	
 		data = []
 	
 		for item in result:
-			rank = item[0]
-			percent = item[1]
-			id = item[2]
-			data = item[3]
+			data_id = int(item[0])
+			rank = item[1]
+			percent = item[2]
+			did = item[3]
 		
-			p = data.split("\t")
-			title = p[1]
-			p = p[0].split(" ")
-			block_start = int(p[0])
-			block_length = int(p[1])
-			start = int(p[2])
-			length = int(p[3])
-	
-			data.append([id, percent, rank, title])
+			reader = self.__load_reader(lang)
+			res = reader.read_title(data_id)
+
+			if not res:
+				# FIXME
+				continue
+
+			(title, block, start, length) = res
+
+			data.append([data_id, title, percent, rank])
 		
 		template = get_template('search_result.html')
 		html = template.render(Context({
-			'languages': data.values(),
+			'keywords': keywords,
+			'lang': lang,
 			'result': data
 		}))
 		return HttpResponse(html)

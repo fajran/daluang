@@ -25,19 +25,19 @@ class Converter:
 
 	def __add_data(self, block_number, data):
 		values = (block_number, sqlite3.Binary(data))
-		self.dbc.execute('''INSERT INTO data VALUES (?, ?)''', values)
+		self.dbc.execute('''INSERT INTO data (block, data) VALUES (?, ?)''', values)
 
 	def __add_toc(self, title, block_number, start, length):
-		values = (title.strip().lower(), block_number, start, length)
-		self.dbc.execute('''INSERT INTO titles VALUES (?, ?, ?, ?)''', values)
+		values = (title.strip(), block_number, start, length)
+		self.dbc.execute('''INSERT INTO titles (title, block, start, length) VALUES (?, ?, ?, ?)''', values)
 
 	def __add_namespace(self, key, namespace):
 		values = (int(key), namespace)
-		self.dbc.execute('''INSERT INTO namespaces VALUES (?, ?)''', values)
+		self.dbc.execute('''INSERT INTO namespaces (key, namespace) VALUES (?, ?)''', values)
 
 	def __add_info(self, key, value):
 		values = (key, value)
-		self.dbc.execute('''INSERT INTO info VALUES (?, ?)''', values)
+		self.dbc.execute('''INSERT INTO info (key, value) VALUES (?, ?)''', values)
 
 	def set_code(self, code):
 		self.info_code = code
@@ -52,9 +52,9 @@ class Converter:
 		self.dbc = self.db.cursor()
 
 		self.dbc.execute('''CREATE TABLE data (block INTEGER, data BLOB)''')
-		self.dbc.execute('''CREATE TABLE titles (title STRING, block INTEGER, start INTEGER, length INTEGER)''')
-		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER, namespace STRING)''')
-		self.dbc.execute('''CREATE TABLE info (key STRING, value STRING)''')
+		self.dbc.execute('''CREATE TABLE titles (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, block INTEGER, start INTEGER, length INTEGER)''')
+		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER PRIMARY KEY, namespace STRING)''')
+		self.dbc.execute('''CREATE TABLE info (key STRING PRIMARY KEY, value STRING)''')
 
 		print "Input: %s" % self.input
 		print "Output: %s" % self.output
@@ -146,6 +146,8 @@ class Converter:
 
 		for key in metadata:
 			self.__add_info(key, metadata[key])
+
+		self.dbc.execute('''CREATE INDEX titles_index ON titles (title)''')
 
 		self.db.commit()
 		self.db.close()

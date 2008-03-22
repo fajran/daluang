@@ -17,7 +17,7 @@ class Reader:
 
 	def read_info(self, key):
 		values = (key,)
-		self.dbc.execute('select key, value from info where key=?', values)
+		self.dbc.execute('SELECT key, value FROM info WHERE key=?', values)
 
 		row = self.dbc.fetchone()
 		if row:
@@ -27,7 +27,7 @@ class Reader:
 
 	def read_namespace(self, key):
 		values = (key,)
-		self.dbc.execute('select key, namespace from namespaces where key=?', values)
+		self.dbc.execute('SELECT key, namespace FROM namespaces WHERE key=?', values)
 
 		row = self.dbc.fetchone()
 		if row:
@@ -39,7 +39,7 @@ class Reader:
 			
 		if block != self.last_block:
 			values = (block,)
-			self.dbc.execute('select block, data from data where block=?', values)
+			self.dbc.execute('SELECT block, data FROM data WHERE block=?', values)
 			row = self.dbc.fetchone()
 
 			if row:
@@ -68,9 +68,15 @@ class Reader:
 
 	def find(self, title):
 	
-		title = title.strip().lower().replace('_', ' ')
+		# FIXME
+		try:
+			title = title.strip()
+		except:
+			title = str(title).strip()
+
+		title = title.replace('_', ' ')
 	
-		self.dbc.execute('select title, block, start, length from titles where title=?', (title,))
+		self.dbc.execute('SELECT title, block, start, length FROM titles WHERE title LIKE ?', (title,))
 
 		row = self.dbc.fetchone()
 		if row:
@@ -78,4 +84,13 @@ class Reader:
 		else:
 			return None
 
+	def read_title(self, id):
+		self.dbc.execute('SELECT title, block, start, length FROM titles WHERE id=?', (id,))
+		row = self.dbc.fetchone()
+
+		if row:
+			return row[0], row[1], row[2], row[3]
+		else:
+			return None
+			
 

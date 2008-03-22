@@ -1,7 +1,16 @@
 #!/usr/bin/python
 
 import sys
+import os
 from daluang import Config, Converter, Reader, Locator
+
+xapian_enabled = True
+try:
+	import xapian
+	from daluang.search import Indexer
+	import sqlite3
+except ImportError:
+	xapian_enabled = False
 
 #
 # Usage
@@ -13,6 +22,7 @@ def usage():
 Available commands:
 
 - convert : convertes a wikipedia dump file
+- index   : creates Xapian's index for a daluang data
 - list    : lists all installed wikipedia files
 - read    : reads a wikipedia entry
 - help    : help for other commands"""
@@ -111,12 +121,52 @@ def usage_list():
 	pass
 
 #
+# List
+#
+def cmd_index():
+	if len(sys.argv) < 4:
+		usage_index()
+		sys.exit(1)
+
+	if not xapian_enabled:
+		print """python-xapian doesn't exist"""
+		sys.exit(1)
+
+	data = sys.argv[2]
+	database = sys.argv[3]
+
+	stem_language = "none"
+
+	reader = Reader(data)
+	indexer = Indexer(reader, database, stem_language)
+	indexer.index()
+
+	db = sqlite3.connect(os.path.join(database, 'meta.data'))
+	dbc = db.cursor()
+	dbc.execute("""CREATE TABLE info (key STRING PRIMARY KEY, value STRING)""")
+	dbc.execute("""INSERT INTO info (key, value) VALUES (?, ?)""", ('stemmer', stem_language))
+	db.commit()
+	db.close()
+
+def usage_index():
+	print """Usage: daluang index <data> <database>
+
+<data> is a Daluang's data and <database> is a target Xapian's database.
+
+You have to install python-xapian package in order to use this function.
+	
+Example usage:
+
+    daluang index id.data id"""
+
+#
 # Main
 #
 
 apps = {
 	'help' : [cmd_help, usage_help],
 	'convert': [cmd_convert, usage_convert],
+	'index': [cmd_index, usage_index],
 	'read' : [cmd_read, usage_read],
 	'list' : [cmd_list, usage_list]
 }
