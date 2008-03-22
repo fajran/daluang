@@ -51,6 +51,7 @@ class Browser:
 		self.btn_home.connect("clicked", self.__on_home_clicked)
 		self.txt_article.connect("activate", self.__on_article_changed)
 		self.browser.connect("location", self.__on_browser_changed)
+		self.browser.connect("open-uri", self.__on_browser_uri_opened)
 	
 	# Signals 
 	def __on_window_destroy(self, src):
@@ -77,6 +78,13 @@ class Browser:
 
 	def __on_browser_changed(self, src):
 		self.__update_button()
+
+	def __on_browser_uri_opened(self, src, uri, data=None):
+		if uri.startswith(self.base_addr):
+			return False
+		else:
+			webbrowser.open(uri)
+			return True
 
 	def __update_button(self):
 		self.btn_back.set_sensitive(self.browser.can_go_back())
