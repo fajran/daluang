@@ -5,7 +5,7 @@ from daluang import Config, Reader, Parser, Locator
 from django.template.loader import get_template
 from django.template import Context
 from django.conf.urls.defaults import *
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
 import re
 
 search_enabled = False
@@ -90,7 +90,7 @@ class Handler:
 	
 		res = reader.read(article)
 		if res == None:
-			raise Http404
+			return self.serve_not_found(req, lang, article)
 	
 		title, wiki = res
 		parser = Parser(wiki)
@@ -105,6 +105,16 @@ class Handler:
 		}))
 	
 		return HttpResponse(html)
+
+	def serve_not_found(self, req, lang, article):
+
+		template = get_template('not_found.html')
+		html = template.render(Context({
+			'article': article,
+			'lang': lang
+		}))
+	
+		return HttpResponseNotFound(html)
 	
 	def serve_misc(self, req, lang, item):
 	
