@@ -25,6 +25,7 @@ class Browser:
 		self.__init_signal()
 
 		self.re_article = re.compile(r'([^/]+)/article/([^/]+)(/|$)')
+		self.re_search = re.compile(r'([^/]+)/(article|search)/([^/]+)(/|$)')
 
 	def __init_gui(self):
 		self.window = self.glade.get_widget("window")
@@ -52,6 +53,8 @@ class Browser:
 		self.txt_article.connect("activate", self.__on_article_changed)
 		self.browser.connect("location", self.__on_browser_changed)
 		self.browser.connect("open-uri", self.__on_browser_uri_opened)
+		self.browser.connect("title", self.__on_browser_title_changed)
+		self.browser.connect("net-stop", self.__on_browser_complete)
 	
 	# Signals 
 	def __on_window_destroy(self, src):
@@ -86,6 +89,22 @@ class Browser:
 			webbrowser.open(uri)
 			return True
 
+	def __on_browser_complete(self, src, data=None):
+		curr = self.browser.get_location()
+
+		skip = len(self.base_addr)
+		path = curr[skip:].strip('/ ')
+		match = self.re_article.match(path)
+
+		if match:
+			article = match.group(2)
+			title = urllib.unquote(article.replace('_', ' '))
+			self.txt_article.set_text(title)
+
+	def __on_browser_title_changed(self, src, data=None):
+		title = self.browser.get_title()
+		self.window.set_title(title)
+
 	def __update_button(self):
 		self.btn_back.set_sensitive(self.browser.can_go_back())
 		self.btn_forward.set_sensitive(self.browser.can_go_forward())
@@ -103,11 +122,12 @@ class Browser:
 
 		skip = len(self.base_addr)
 		path = curr[skip:].strip('/ ')
-		match = self.re_article.match(path)
+		match = self.re_search.match(path)
 
 		if match:
 			lang = match.group(1)
-			url = "%s/%s/article/%s" % (self.base_addr, lang, article)
+			type = match.group(2)
+			url = "%s/%s/%s/%s" % (self.base_addr, lang, type, article)
 			self.open_url(url)
 
 	def open_url(self, url):

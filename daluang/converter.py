@@ -5,6 +5,7 @@ import re
 import os
 import sqlite3
 import sys
+import datetime
 
 class Converter:
 	
@@ -14,6 +15,7 @@ class Converter:
 
 		self.info_code = "en"
 		self.info_language = "English"
+		self.info_timestamp = datetime.date.today().strftime("%Y%m%d")
 
 	def __flush(self):
 		data = bz2.compress(self.buffer)
@@ -45,6 +47,9 @@ class Converter:
 	def set_language(self, language):
 		self.info_language = language
 
+	def set_timestamp(self, timestamp):
+		self.info_timestamp = timestamp
+
 	def convert(self):
 		
 		fin = bz2.BZ2File(self.input, "r")
@@ -63,6 +68,7 @@ class Converter:
 
 		self.__add_info("language", self.info_language)
 		self.__add_info("code", self.info_code)
+		self.__add_info("timestamp", self.info_timestamp)
 
 		max_block_size = 900 * 1024
 

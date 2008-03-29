@@ -7,10 +7,37 @@ from daluang import Config, Converter, Reader, Locator
 xapian_enabled = True
 try:
 	import xapian
-	from daluang.search import Indexer
-	import sqlite3
+	from daluang.search import Writer
 except ImportError:
 	xapian_enabled = False
+
+config = None
+languages = None
+data = None
+
+#
+# Common
+#
+def load_config():
+	global config
+	if config == None:
+		config = Config()
+		config.init()
+
+def load_data():
+	global data, languages
+	if data == None:
+		base_dir = config.read('base', '/usr/share/daluang')
+		data_dir = os.path.join(base_dir, 'data')
+
+		locator = Locator()
+		list = locator.scan(data_dir)
+
+		data = {}
+		languages = []
+		for item in list:
+			data[item['code']] = item
+			languages.append(item['code'])
 
 #
 # Usage
@@ -44,7 +71,9 @@ def cmd_help():
 		print "Available commands: %s" % (" ".join(cmds))
 
 def usage_help():
-	print "Usage: daluang help <dommand>"
+	print '''Need help?
+	
+Usage: daluang help <command>'''
 
 #
 # Index
@@ -74,16 +103,17 @@ def cmd_convert():
 	
 
 def usage_convert():
-	print """Usage: daluang convert <language> <code> <data>
+	print """This command is used to convert a data from Wikipedia's format to Daluang own format.
+	
+Usage: daluang convert <language> <code> <data>
 
-<data> is an XML database dump of Wikipedia. 
-Usually it is written in the following format:
+    <data> is an XML database dump of Wikipedia. Usually it is written in the following format:
 
-    idwiki-20080213-pages-articles.xml.bz2
+        idwiki-20080213-pages-articles.xml.bz2
 	
 Example usage:
 
-    daluang convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2"""
+    $ daluang convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2"""
 
 #
 # Read
@@ -93,10 +123,16 @@ def cmd_read():
 		usage_read()
 		sys.exit(1)
 
-	data = sys.argv[2]
+	lang = sys.argv[2]
 	title = sys.argv[3]
 
-	r = Reader(data)
+	if os.path.exists(lang):
+		r = Reader(lang)
+	else:
+		load_config()
+		load_data()
+		r = Reader(data[lang]['datafile'])
+
 	result = r.read(title)
 	if result == None:
 		print "Not found: %s" % title
@@ -105,23 +141,53 @@ def cmd_read():
 		print content
 
 def usage_read():
-	# TODO
-	print "Usage: daluang read <datafile> <title>"
+	print '''This command is used to read an article from Daluang data.
+	
+Usage: daluang read <datafile|code> <title>
+
+    <datafile|code> is either a data file or a language code.
+
+Example usage:
+
+    $ daluang read id.data "bandung"
+    $ daluang read id "bandung"'''
+
 	pass
 
 #
 # List
 #
 def cmd_list():
-	# TODO
-	pass
+	load_config()
+	load_data()
+	
+	if len(data) == 0:
+		print "No data available"
+
+	else:
+		print "Available data:"
+
+		cnt = 0
+		for lang in languages:
+			cnt += 1
+			print "%d. [%s] %s" % (cnt, lang, data[lang]['lang'])
+
 
 def usage_list():
-	# TODO
-	pass
+	print '''This command is used to list installed data.
+
+Each line will be written in the following format:
+
+    [code] langauge
+
+Example:
+
+    [id] Bahasa Indonesia
+
+The value of "code" is used when you use daluang data command.'''
 
 #
-# List
+# Index
 #
 def cmd_index():
 	if len(sys.argv) < 4:
@@ -137,27 +203,24 @@ def cmd_index():
 
 	stem_language = "none"
 
-	reader = Reader(data)
-	indexer = Indexer(reader, database, stem_language)
-	indexer.index()
-
-	db = sqlite3.connect(os.path.join(database, 'meta.data'))
-	dbc = db.cursor()
-	dbc.execute("""CREATE TABLE info (key STRING PRIMARY KEY, value STRING)""")
-	dbc.execute("""INSERT INTO info (key, value) VALUES (?, ?)""", ('stemmer', stem_language))
-	db.commit()
-	db.close()
+	writer = Writer()
+	writer.set_data(data)
+	writer.set_database(database)
+	writer.set_stem_language(stem_language)
+	writer.index()
 
 def usage_index():
-	print """Usage: daluang index <data> <database>
+	print """This command is used to create a Xapian index of a data.
+	
+Usage: daluang index <data> <database>
 
-<data> is a Daluang's data and <database> is a target Xapian's database.
+    <data> is a Daluang's data and <database> is a target Xapian's database.
 
-You have to install python-xapian package in order to use this function.
+You have to install python-xapian package in order to use this function. This operation may take very long time!
 	
 Example usage:
 
-    daluang index id.data id"""
+    $ daluang index id.data id"""
 
 #
 # Main
