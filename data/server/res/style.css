@@ -1,11 +1,13 @@
 body {
 	font-family: verdana, tahoma, arial, sans-serif;
 	font-size: 10pt;
+	line-height: 16pt;
 	margin: 20px 30px 20px 20px;
 }
 
 .ext {
-	color: red;
+	padding-right: 16px;
+	background: url(ext.png) center right no-repeat;
 }
 
 h1 {
@@ -29,4 +31,27 @@ span.img {
 	display: none;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-family: "trebuchet ms", arial, sans-serif;
+}
+
+h1 {
+	font-size: 24pt;
+	line-height: 16pt;
+}
+h2 {
+	font-size: 18pt;
+}
+h3 {
+	font-size: 16pt;
+}
+
+a {
+	color: #1836CF;
+	text-decoration: none;
+	border-bottom: 1px dotted #1836CF;
+}
+a:hover {
+	border-bottom: 1px solid #1836CF;
+}
 

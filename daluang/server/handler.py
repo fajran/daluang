@@ -102,6 +102,9 @@ class Handler:
 
 	def serve_not_found(self, req, lang, article):
 
+		article = self.__filter_article(article)
+		article = article.replace('_', ' ')
+
 		template = get_template('not_found.html')
 		html = template.render(Context({
 			'article': article,
@@ -134,6 +137,7 @@ class Handler:
 			return HttpResponseRedirect('/')
 
 		keywords = self.__filter_article(keywords)
+		keywords = keywords.replace('_', ' ')
 
 		if keywords == None or keywords.strip() == "":
 			template = get_template('search_form.html')

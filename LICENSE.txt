@@ -1,3 +1,14 @@
+
+Daluang is released under GNU General Public License v2
+
+
+Other works that are used in this project:
+- Wikipedia's external link icon (GNU Free Document License)
+  http://commons.wikimedia.org/wiki/Image:Icon_External_Link.png
+
+
+======================================================================
+
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991
 
