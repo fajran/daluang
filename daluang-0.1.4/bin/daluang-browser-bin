@@ -1,0 +1,32 @@
+#!/usr/bin/python
+
+import os
+import sys
+import random
+import signal
+
+from daluang import Config, server
+from daluang.browser import Browser
+
+port_start = 20000
+port_end = 20100
+
+port = random.randint(port_start, port_end)
+addr = '0.0.0.0'
+base = 'http://localhost:%d/' % port
+
+ppid = os.getpid()
+pid = os.fork()
+if pid == 0:
+	try:
+		b = Browser(base)
+		b.main()
+		os.kill(ppid, signal.SIGTERM)
+	except KeyboardInterrupt:
+		pass
+
+else:
+	server.start(port=port, addr=addr)
+	
+sys.exit(0)
+
