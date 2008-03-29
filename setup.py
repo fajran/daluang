@@ -18,11 +18,17 @@ setup(name='daluang',
 		('share/daluang/example', [
 			'example/daluang.conf'
 		]),
+		('share/applications', [
+			'example/daluang.desktop'
+		]),
 		('share/daluang/data', []),
 		('share/daluang/index', []),
-		('share/daluang/browser/res', [
-			'data/browser/res/browser.glade'
-		]),
+		('share/icons/hicolor/icons/16x16/apps', ['data/browser/icons/16x16/apps/daluang.png']),
+		('share/icons/hicolor/icons/22x22/apps', ['data/browser/icons/22x22/apps/daluang.png']),
+		('share/icons/hicolor/icons/24x24/apps', ['data/browser/icons/24x24/apps/daluang.png']),
+		('share/icons/hicolor/icons/32x32/apps', ['data/browser/icons/32x32/apps/daluang.png']),
+		('share/icons/hicolor/icons/48x48/apps', ['data/browser/icons/48x48/apps/daluang.png']),
+		('share/icons/hicolor/icons/64x64/apps', ['data/browser/icons/64x64/apps/daluang.png']),
 		('share/daluang/server/res', [
 			'data/server/res/style.css', 
 			'data/server/res/index.css',
