@@ -35,7 +35,7 @@ class Writer:
 			elif row[0] == 'code':
 				code = row[1]
 			elif row[0] == 'timestamp':
-				code = row[1]
+				timestamp = row[1]
 
 		db.commit()
 		db.close()
