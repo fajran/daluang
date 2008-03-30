@@ -1,5 +1,9 @@
 
-import xapian
+xapian_enabled = True
+try:
+	import xapian
+except ImportError:
+	xapian_enabled = False
 
 class Indexer:
 

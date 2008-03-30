@@ -1,3 +1,7 @@
+daluang trunk - Sun, 30 Mar 2008 11:27:43 +0200
+
+  * Fix xapian import error (ISSUE #14)
+
 daluang 1.4.0 - Sun, 30 Mar 2008 00:08:49 +0100
 
   * Xapian integration
