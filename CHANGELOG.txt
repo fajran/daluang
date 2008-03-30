@@ -1,6 +1,8 @@
-daluang trunk - Sun, 30 Mar 2008 11:27:43 +0200
+daluang 1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
 
+  * Fix desktop file (ISSUE #13)
   * Fix xapian import error (ISSUE #14)
+  * Daluang 1.4.1
 
 daluang 1.4.0 - Sun, 30 Mar 2008 00:08:49 +0100
 
