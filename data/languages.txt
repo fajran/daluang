@@ -1,0 +1,255 @@
+en	English 
+de	German 
+fr	French 
+pl	Polish 
+ja	Japanese 
+it	Italian 
+nl	Dutch 
+pt	Portuguese 
+es	Spanish 
+sv	Swedish 
+ru	Russian 
+zh	Chinese 
+no	Norwegian (Bokmål)
+fi	Finnish 
+vo	Volapük
+ca	Catalan 
+ro	Romanian 
+tr	Turkish 
+uk	Ukrainian 
+eo	Esperanto 
+cs	Czech 
+hu	Hungarian 
+sk	Slovak 
+da	Danish 
+id	Indonesian 
+he	Hebrew 
+lt	Lithuanian 
+sr	Serbian 
+sl	Slovenian 
+ko	Korean 
+ar	Arabic 
+bg	Bulgarian 
+et	Estonian 
+hr	Croatian 
+new	Newar / Nepal Bhasa 
+te	Telugu 
+vi	Vietnamese 
+gl	Galician 
+th	Thai 
+ceb	Cebuano 
+fa	Persian 
+el	Greek 
+nn	Norwegian (Nynorsk) 
+ms	Malay 
+simple	Simple English 
+eu	Basque 
+bpy	Bishnupriya Manipuri 
+bs	Bosnian 
+ka	Georgian 
+is	Icelandic 
+lb	Luxembourgish 
+sq	Albanian 
+la	Latin 
+br	Breton 
+az	Azeri 
+hi	Hindi 
+bn	Bengali 
+ht	Haitian 
+mr	Marathi 
+mk	Macedonian 
+tl	Tagalog 
+sh	Serbo-Croatian 
+io	Ido 
+cy	Welsh 
+pms	Piedmontese 
+lv	Latvian 
+su	Sundanese 
+ta	Tamil 
+nap	Neapolitan 
+jv	Javanese 
+oc	Occitan 
+nds	Low Saxon 
+scn	Sicilian 
+ast	Asturian 
+ku	Kurdish 
+be	Belarusian 
+wa	Walloon 
+af	Afrikaans 
+be-x-old	Belarusian (Tarashkevitsa) 
+tg	Tajik 
+an	Aragonese 
+vec	Venetian 
+roa-tara	Tarantino 
+zh-yue	Cantonese 
+fy	West Frisian 
+cv	Chuvash 
+ur	Urdu 
+ksh	Ripuarian 
+sw	Swahili 
+qu	Quechua 
+uz	Uzbek 
+mi	Maori 
+ga	Irish 
+bat-smg	Samogitian 
+ml	Malayalam 
+gd	Scottish Gaelic 
+co	Corsican 
+yo	Yoruba 
+kn	Kannada 
+pam	Kapampangan 
+yi	Yiddish 
+hsb	Upper Sorbian 
+nah	Nahuatl 
+ia	Interlingua 
+li	Limburgian 
+sa	Sanskrit 
+hy	Armenian 
+tt	Tatar 
+als	Alemannic 
+roa-rup	Aromanian 
+lmo	Lombard 
+map-bms	Banyumasan 
+am	Amharic 
+pag	Pangasinan 
+nrm	Norman 
+zh-min-nan	Min Nan 
+fo	Faroese 
+wuu	Wu 
+vls	West Flemish 
+nds-nl	Dutch Low Saxon 
+se	Northern Sami 
+war	Waray-Waray 
+ne	Nepali 
+rm	Romansh 
+fur	Friulian 
+nov	Novial 
+lij	Ligurian 
+bh	Bihari 
+dv	Divehi 
+sco	Scots 
+pi	Pali 
+ilo	Ilokano 
+diq	Zazaki 
+os	Ossetian 
+kk	Kazakh 
+frp	Franco-Provençal/Arpitan
+zh-classical	Classical Chinese 
+mt	Maltese 
+lad	Ladino 
+fiu-vro	Võro
+pdc	Pennsylvania German 
+csb	Kashubian 
+kw	Cornish 
+bar	Bavarian 
+to	Tongan 
+haw	Hawaiian 
+mn	Mongolian 
+ps	Pashto 
+ang	Anglo-Saxon 
+km	Khmer 
+tk	Turkmen 
+gv	Manx 
+ln	Lingala 
+ie	Interlingue 
+tpi	Tok Pisin 
+crh	Crimean Tatar 
+jbo	Lojban 
+ay	Aymara 
+zea	Zealandic 
+wo	Wolof 
+eml	Emilian-Romagnol 
+or	Oriya 
+si	Sinhalese 
+ig	Igbo 
+mg	Malagasy 
+sc	Sardinian 
+cbk-zam	Zamboanga Chavacano 
+gu	Gujarati 
+kg	Kongo 
+ty	Tahitian 
+ky	Kirghiz 
+glk	Gilaki 
+arc	Assyrian Neo-Aramaic 
+mo	Moldovan 
+kab	Kabyle 
+gn	Guarani 
+so	Somali 
+ks	Kashmiri 
+stq	Saterland Frisian 
+mzn	Mazandarani 
+cu	Old Church Slavonic 
+ce	Chechen 
+udm	Udmurt 
+tet	Tetum 
+sd	Sindhi 
+ba	Bashkir 
+pa	Punjabi 
+rmy	Romani 
+lo	Lao 
+na	Nauruan 
+iu	Inuktitut 
+got	Gothic 
+bo	Tibetan 
+bcl	Central_Bicolano 
+chr	Cherokee 
+om	Oromo 
+hak	Hakka 
+ug	Uyghur 
+sm	Samoan 
+ee	Ewe 
+cdo	Min Dong 
+ti	Tigrinya 
+as	Assamese 
+dsb	Lower Sorbian 
+av	Avar 
+bm	Bambara 
+zu	Zulu 
+nv	Navajo 
+pap	Papiamentu 
+my	Burmese 
+pih	Norfolk 
+cr	Cree 
+ss	Swati 
+ve	Venda 
+rw	Kinyarwanda 
+xh	Xhosa 
+kl	Greenlandic 
+ik	Inupiak 
+bug	Buginese 
+ts	Tsonga 
+dz	Dzongkha 
+kv	Komi 
+bi	Bislama 
+tn	Tswana 
+xal	Kalmyk 
+st	Sesotho 
+tw	Twi 
+ch	Chamorro 
+ak	Akan 
+bxr	Buryat (Russia) 
+ab	Abkhazian 
+ny	Chichewa 
+fj	Fijian 
+lbe	Lak 
+za	Zhuang 
+ff	Fula 
+ha	Hausa 
+sn	Shona 
+tum	Tumbuka 
+sg	Sango 
+lg	Luganda 
+ki	Kikuyu 
+ii	Sichuan Yi 
+rn	Kirundi 
+aa	Afar 
+cho	Choctaw 
+mh	Marshallese 
+chy	Cheyenne 
+ng	Ndonga 
+kj	Kuanyama 
+ho	Hiri Motu 
+mus	Muscogee 
+kr	Kanuri 
+hz	Herero 
+tokipona	Tokipona 

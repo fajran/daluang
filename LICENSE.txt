@@ -11,6 +11,8 @@ Other works that are used in this project:
   Licensed under Creative Commons Attribution Share-Alike
   http://creativecommons.org/licenses/by-sa/2.5/
 
+- jQuery (GNU General Public License v2)
+
 
 ======================================================================
 

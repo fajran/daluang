@@ -55,3 +55,7 @@ a:hover {
 	border-bottom: 1px solid #1836CF;
 }
 
+#info .title {
+	font-weight: bold;
+}
+

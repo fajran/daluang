@@ -1,26 +1,41 @@
 #!/usr/bin/python
 
 import re
+import os
+
+from config import Config
 
 class Parser:
 
-	def __init__(self, wiki):
-		self.wiki = wiki
-		self.html = None
+	def __init__(self):
+		self.config = Config()
+		self.config.init()
 
 		self.__init()
 		self.__init_re()
 
-	def parse(self):
-		if self.html != None:
-			return self.html
+	def parse(self, wiki, code):
+		self.__reset()
+		
+		# TODO: use cache!
+		#if self.html != None:
+		#	return self.html
 
-		self.__parse_wiki()
+		html = self.__parse_wiki(wiki, code)
 
-		return self.html
+		return html
 
-	def __parse_wiki(self):
-		text = self.wiki
+	def __reset(self):
+		self.nowiki = []
+		self.references = []
+
+		self.link_external_cnt = 0
+		self.link_categories = []
+		self.link_translations = []
+		pass
+
+
+	def __parse_wiki(self, text, code):
 
 		text = self.__fix_html_entities(text)
 		text = self.__remove_comments(text)
@@ -35,7 +50,7 @@ class Parser:
 		text = self.__make_paragraphs(text)
 		text = self.__make_info(text)
 
-		self.html = text
+		return text
 
 	#
 	# Init
@@ -48,14 +63,6 @@ class Parser:
 			'image': ['image', 'gambar'],
 			'category': ['category', 'kategori']
 		}
-
-		# Links
-
-		self.link_external_cnt = 0
-		self.link_categories = []
-		self.link_translations = []
-
-		self.references = []
 
 		# Tokens
 
@@ -73,6 +80,16 @@ class Parser:
 		# URL
 
 		self.set_url_base('file://')
+
+		# Langauge codes
+
+		base = self.config.read('base', '/usr/share/daluang')
+		file = os.path.join(base, 'languages.txt')
+		f = open(file)
+		self.languages = {}
+		for line in f:
+			(code, language) = line.strip().split("\t")
+			self.languages[code] = language
 
 	#
 	# URL
@@ -135,6 +152,10 @@ class Parser:
 		self.heading_re = re.compile('^(=+)\s*([^=]+)\s*(=+)')
 		self.break_re = re.compile('^\s*(----+\s*)(.*)$')
 		self.comments_re = re.compile(r'<!--.+?-->', re.DOTALL)
+
+		# Language codes
+
+		self.languages_re = re.compile(r'^(%s)$' % "|".join(self.languages.keys()))
 
 	#
 	# Comments
@@ -363,9 +384,14 @@ class Parser:
 				return ''
 
 			else:
-				url = (url[0].upper() + url[1:]).replace(' ', '_')
-				return '<a href="%s" class="int">%s</a>' % (self.url_base_article + url, label)
-					
+				mcode = self.languages_re.match(tag)
+
+				if mcode:
+					self.link_translations.append([tag, m.group(4)])
+
+				else:
+					url = (url[0].upper() + url[1:]).replace(' ', '_')
+					return '<a href="%s" class="int">%s</a>' % (self.url_base_article + url, label)
 
 		else:
 			url = (url[0].upper() + url[1:]).replace(' ', '_')
@@ -705,8 +731,10 @@ class Parser:
 	#
 
 	def __make_info(self, text):
+
 		data = ""
-		data += self.__make_categories(text)
+		data += self.__make_categories()
+		data += self.__make_languages()
 
 		if len(data) > 0:
 			text += "<div id='info'>\n"
@@ -715,7 +743,7 @@ class Parser:
 
 		return text
 
-	def __make_categories(self, text):
+	def __make_categories(self):
 		result = ""
 		
 		list = []
@@ -723,9 +751,26 @@ class Parser:
 			list.append('<a class="int" href="%s">%s</a>' % (self.url_base_article + cat[0], cat[1]))
 
 		if len(list) > 0:
-			result = '<div id="categories"><span>Category:</span> '
+			result = '<div id="categories"><span class="title">Category:</span> '
 			result += " | ".join(list)
 			result += '</div>'
+
+		return result
+
+	def __make_languages(self):
+		result = ""
+		
+		list = []
+		for (code, article) in self.link_translations:
+			list.append('<li><a class="int" href="/%s/article/%s/">%s</a></li>' % (code, article, self.languages[code]))
+
+		if len(list) > 0:
+			result = "<div id='languages'><span class='title'>Other languages:</span> "
+			result += "<span class='language-switch' onclick='toggle_language()'>[show]</span>"
+			result += "<span style='display:none' class='language-switch' onclick='toggle_language()'>[hide]</span>"
+			result += "<ul class='language-switch' style='display:none'>\n"
+			result += "\n".join(list)
+			result += "\n</ul></div>"
 
 		return result
 

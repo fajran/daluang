@@ -43,7 +43,7 @@ class Finder:
 		config = Config()
 		config.init()
 
-		base_dir = config.read('base')
+		base_dir = config.read('base', '/usr/share/daluang')
 		database = os.path.join(base_dir, 'index', self.code)
 		meta = os.path.join(database, 'meta.data')
 

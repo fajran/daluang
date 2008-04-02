@@ -30,6 +30,8 @@ class Handler:
 		self.__load_data()
 		self.reader = {}
 
+		self.parser = Parser()
+
 	def __get_main_page(self, lang):
 		reader = self.__load_reader(lang)
 		base = reader.read_info('base')
@@ -87,9 +89,8 @@ class Handler:
 			return self.serve_not_found(req, lang, article)
 	
 		title, wiki = res
-		parser = Parser(wiki)
-		parser.set_url_base('/%s/' % lang)
-		content = parser.parse()
+		self.parser.set_url_base('/%s/' % lang)
+		content = self.parser.parse(wiki, "id")
 		
 		template = get_template('article.html')
 		html = template.render(Context({

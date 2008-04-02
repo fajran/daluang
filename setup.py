@@ -15,6 +15,9 @@ setup(name='daluang',
 			'bin/daluang-browser', 
 			'bin/daluang-browser-bin'
 		]),
+		('share/daluang', [
+			'data/languages.txt'
+		]),
 		('share/daluang/example', [
 			'example/daluang.conf'
 		]),
