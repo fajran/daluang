@@ -5,6 +5,8 @@
 </head><body>
 <h1>Search result</h1>
 
+{% if result %}
+
 <p>Search result for <strong>{{ keywords }}</strong>:</p>
 
 <ul>
@@ -12,5 +14,11 @@
 <li><a href="/{{ lang }}/article/{{ item.1 }}/">{{ item.1 }}</a></li>
 {% endfor %}
 </ul>
+
+{% else %}
+
+<p>Daluang could not found anything about <strong>{{ keywords }}</strong>.</p>
+
+{% endif %}
 
 </body></html>
