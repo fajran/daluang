@@ -8,6 +8,7 @@ daluang trunk - Wed, 02 Apr 2008 22:07:33 +0200
   * Refactor Parser class (ISSUE #15)
   * Search yields no result message (ISSUE #16)
   * Caching system (ISSUE #17)
+  * Offer online version when accessing unavailable content
 
 daluang 1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
 

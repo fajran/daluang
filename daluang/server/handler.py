@@ -33,6 +33,14 @@ class Handler:
 		self.parser = Parser()
 		self.cache = Cache()
 
+		# Language index
+		file = os.path.join(base_dir, 'languages.txt')
+		f = open(file)
+		self.language = {}
+		for line in f:
+			(code, lang) = line.strip().split("\t")
+			self.language[code] = lang
+
 	def __get_main_page(self, lang):
 		reader = self.__load_reader(lang)
 		base = reader.read_info('base')
@@ -79,7 +87,7 @@ class Handler:
 
 	def serve_article(self, req, lang, article):
 		if not lang in self.languages:
-			return HttpResponseRedirect('/')
+			return self.serve_unavailable(req, lang, article)
 
 		article = self.__filter_article(article)
 		if article == None:
@@ -105,6 +113,19 @@ class Handler:
 			'lang': lang
 		}))
 	
+		return HttpResponse(html)
+
+	def serve_unavailable(self, req, lang, article):
+		article = self.__filter_article(article)
+		article = article.replace('_', ' ')
+
+		template = get_template('unavailable.html')
+		html = template.render(Context({
+			'article': article,
+			'lang': lang,
+			'language': self.language[lang]
+		}))
+		
 		return HttpResponse(html)
 
 	def serve_not_found(self, req, lang, article):

@@ -912,7 +912,7 @@ class Parser:
 		
 		list = []
 		for (code, article) in self.link_translations:
-			list.append('<li><a class="int" href="/%s/article/%s/">%s</a></li>' % (code, article, self.languages[code]))
+			list.append('<li><a class="int" href="/%s/article/%s/">%s</a>: %s</li>' % (code, article, self.languages[code], article))
 
 		if len(list) > 0:
 			result = "<div id='languages'><span class='title'>Other languages:</span> "
