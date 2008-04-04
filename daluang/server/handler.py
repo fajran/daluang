@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import os
-from daluang import Config, Reader, Parser, Locator
+from daluang import Config, Reader, Parser, Locator, Cache
 from daluang.search import Finder
 from django.template.loader import get_template
 from django.template import Context
@@ -31,6 +31,7 @@ class Handler:
 		self.reader = {}
 
 		self.parser = Parser()
+		self.cache = Cache()
 
 	def __get_main_page(self, lang):
 		reader = self.__load_reader(lang)
@@ -92,7 +93,10 @@ class Handler:
 	
 		title, wiki = res
 		self.parser.set_url_base('/%s/' % lang)
-		content = self.parser.parse(wiki, lang)
+		content = self.cache.get(wiki)
+		if content == None:
+			content = self.parser.parse(wiki, lang)
+			self.cache.store(wiki, content)
 		
 		template = get_template('article.html')
 		html = template.render(Context({
