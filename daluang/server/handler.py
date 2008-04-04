@@ -72,6 +72,8 @@ class Handler:
 			self.reader[lang] = Reader(self.data[lang]['datafile'])
 			res = self.reader[lang]
 
+		self.parser.add_namespace(lang, self.reader[lang].get_namespaces())
+
 		return res
 
 	def serve_article(self, req, lang, article):
@@ -90,7 +92,7 @@ class Handler:
 	
 		title, wiki = res
 		self.parser.set_url_base('/%s/' % lang)
-		content = self.parser.parse(wiki, "id")
+		content = self.parser.parse(wiki, lang)
 		
 		template = get_template('article.html')
 		html = template.render(Context({

@@ -11,8 +11,29 @@ class Parser:
 		self.config = Config()
 		self.config.init()
 
+		self.ns_media = -2
+		self.ns_special = -1
+		self.ns_talk = 1
+		self.ns_user = 2
+		self.ns_user_talk = 3
+		self.ns_wikipedia = 4
+		self.ns_wikipedia_talk = 5
+		self.ns_image = 6
+		self.ns_image_talk = 7
+		self.ns_mediawiki = 8
+		self.ns_mediawiki_talk = 9
+		self.ns_template = 10
+		self.ns_template_talk = 11
+		self.ns_help = 12
+		self.ns_help_talk = 13
+		self.ns_category = 14
+		self.ns_category_talk = 15
+		self.ns_portal = 100
+		self.ns_portal_talk = 101
+
 		self.__init()
 		self.__init_re()
+
 
 	def parse(self, wiki, code):
 		self.__reset()
@@ -32,10 +53,15 @@ class Parser:
 		self.link_external_cnt = 0
 		self.link_categories = []
 		self.link_translations = []
+
+		self.code = None
+
 		pass
 
 
 	def __parse_wiki(self, text, code):
+
+		self.code = code
 
 		text = self.__fix_html_entities(text)
 		text = self.__remove_comments(text)
@@ -59,9 +85,50 @@ class Parser:
 	def __init(self):
 		# TODO: read from data configuration file since it depends on the language used in content
 
-		self.link_category = {
-			'image': ['image', 'gambar'],
-			'category': ['category', 'kategori']
+		self.namespaces = {
+			'en': {
+				"media":          self.ns_media,
+				"special":        self.ns_special,
+				"talk":           self.ns_talk,
+				"user":           self.ns_user,
+				"user_talk":      self.ns_user_talk,
+				"wikipedia":      self.ns_wikipedia,
+				"wikipedia_talk": self.ns_wikipedia_talk,
+				"image":          self.ns_image,
+				"image_talk":     self.ns_image_talk,
+				"mediawiki":      self.ns_mediawiki,
+				"mediawiki_talk": self.ns_mediawiki_talk,
+				"template":       self.ns_template,
+				"template_talk":  self.ns_template_talk,
+				"help":           self.ns_help,
+				"help_talk":      self.ns_help_talk,
+				"category":       self.ns_category,
+				"category_talk":  self.ns_category_talk,
+				"portal":         self.ns_portal,
+				"portal_talk":    self.ns_portal_talk
+			}
+		}
+
+		self.namespace_processor = {
+			self.ns_media:          self.__ns_media,
+			self.ns_special:        self.__ns_special,
+			self.ns_talk:           self.__ns_talk,
+			self.ns_user:           self.__ns_user,
+			self.ns_user_talk:      self.__ns_user_talk,
+			self.ns_wikipedia:      self.__ns_wikipedia,
+			self.ns_wikipedia_talk: self.__ns_wikipedia_talk,
+			self.ns_image:          self.__ns_image,
+			self.ns_image_talk:     self.__ns_image_talk,
+			self.ns_mediawiki:      self.__ns_mediawiki,
+			self.ns_mediawiki_talk: self.__ns_mediawiki_talk,
+			self.ns_template:       self.__ns_template,
+			self.ns_template_talk:  self.__ns_template_talk,
+			self.ns_help:           self.__ns_help,
+			self.ns_help_talk:      self.__ns_help_talk,
+			self.ns_category:       self.__ns_category,
+			self.ns_category_talk:  self.__ns_category_talk,
+			self.ns_portal:         self.__ns_portal,
+			self.ns_portal_talk:    self.__ns_portal_talk
 		}
 
 		# Tokens
@@ -90,6 +157,16 @@ class Parser:
 		for line in f:
 			(code, language) = line.strip().split("\t")
 			self.languages[code] = language
+
+	#
+	# Namespaces
+	#
+	def add_namespace(self, code, namespaces):
+		self.namespaces[code] = {}
+		keys = namespaces.keys()
+		for key in keys:
+			ns = namespaces[key].lower().replace(" ", "_")
+			self.namespaces[code][ns] = key
 
 	#
 	# URL
@@ -369,19 +446,10 @@ class Parser:
 
 		if m.group(3) != None:
 			tag = m.group(3).lower()
-			keys = self.link_category.keys()
-			type = None
-			for key in keys:
-				if tag in self.link_category[key]:
-					type = key
-					break
 
-			if type == 'image':
-				return '<span class="img"><span>image: %s</span></span>' % (self.url_base_image + m.group(4))
-			
-			elif type == 'category':
-				self.link_categories.append([m.group(1), m.group(4)])
-				return ''
+			func = self.__get_ns_processor(tag, self.code)
+			if func:
+				return func(m)
 
 			else:
 				mcode = self.languages_re.match(tag)
@@ -390,12 +458,14 @@ class Parser:
 					self.link_translations.append([tag, m.group(4)])
 
 				else:
-					url = (url[0].upper() + url[1:]).replace(' ', '_')
-					return '<a href="%s" class="int">%s</a>' % (self.url_base_article + url, label)
+					return self.__make_ilink(url, label)
 
 		else:
-			url = (url[0].upper() + url[1:]).replace(' ', '_')
-			return '<a href="%s" class="int">%s</a>' % (self.url_base_article + url, label)
+			return self.__make_ilink(url, label)
+
+	def __make_ilink(self, article, label):
+		article = (article[0].upper() + article[1:]).replace(' ', '_')
+		return '<a href="%s" class="int">%s</a>' % (self.url_base_article + article, label)
 
 	def __parse_elink(self, text):
 		text = text.strip()
@@ -411,6 +481,86 @@ class Parser:
 			label = "[%d]" % self.link_external_cnt
 
 		return '<a href="%s" class="ext">%s</a>' % (url, label)
+
+	#
+	# Namespaces
+	#
+
+	def __ns_media(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_special(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_user(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_user_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_wikipedia(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_wikipedia_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_image(self, m):
+		return '<span class="img"><span>image: %s</span></span>' % (self.url_base_image + m.group(4))
+
+	def __ns_image_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_mediawiki(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_mediawiki_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_template(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_template_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_help(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_help_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_category(self, m):
+		self.link_categories.append([m.group(1), m.group(4)])
+		return ''
+
+	def __ns_category_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_portal(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+
+	def __ns_portal_talk(self, m):
+		return self.__make_ilink(m.group(1), m.group(6))
+		
+	def __get_ns_processor(self, tag, code):
+		ns = self.namespaces.get(self.code, None)
+		if not ns:
+			ns = self.namespaces['en']
+
+		type = ns.get(tag, None)
+		if type:
+			return self.namespace_processor[type]
+
+		# Fallback to english
+		ns = self.namespaces['en']
+
+		type = ns.get(tag, None)
+		if type:
+			return self.namespace_processor[type]
+
+		return None
 
 	#
 	# Formatting

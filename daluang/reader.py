@@ -25,7 +25,7 @@ class Reader:
 		else:
 			return None
 
-	def read_namespace(self, key):
+	def get_namespace(self, key):
 		values = (key,)
 		self.dbc.execute('SELECT key, namespace FROM namespaces WHERE key=?', values)
 
@@ -34,6 +34,15 @@ class Reader:
 			return row[1]
 		else:
 			return None
+
+	def get_namespaces(self):
+		self.dbc.execute('SELECT key, namespace FROM namespaces')
+		res = {}
+
+		for row in self.dbc:
+			res[int(row[0])] = row[1]
+
+		return res
 
 	def read_data(self, block, offset, length):
 			

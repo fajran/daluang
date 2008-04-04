@@ -18,6 +18,7 @@ h1 {
 	background: #eee;
 	border: 1px solid #aaa;
 	padding: 5px;
+	clear: both;
 }
 
 #translations {
@@ -57,5 +58,9 @@ a:hover {
 
 #info .title {
 	font-weight: bold;
+}
+
+.pointer {
+	cursor: pointer;
 }
 

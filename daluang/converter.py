@@ -58,7 +58,7 @@ class Converter:
 
 		self.dbc.execute('''CREATE TABLE data (block INTEGER, data BLOB)''')
 		self.dbc.execute('''CREATE TABLE titles (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, block INTEGER, start INTEGER, length INTEGER)''')
-		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER PRIMARY KEY, namespace STRING)''')
+		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER, namespace STRING)''')
 		self.dbc.execute('''CREATE TABLE info (key STRING PRIMARY KEY, value STRING)''')
 
 		print "Input: %s" % self.input

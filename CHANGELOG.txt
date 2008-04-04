@@ -4,7 +4,8 @@ daluang trunk - Wed, 02 Apr 2008 22:07:33 +0200
   * Add article.js
   * Add language list
   * Add other languages link
-  * Refactor Parser class (ISSUE #15 -- partial)
+  * Use namespaces information
+  * Refactor Parser class (ISSUE #15)
 
 daluang 1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
 
