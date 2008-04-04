@@ -916,8 +916,8 @@ class Parser:
 
 		if len(list) > 0:
 			result = "<div id='languages'><span class='title'>Other languages:</span> "
-			result += "<span class='language-switch' onclick='toggle_language()'>[show]</span>"
-			result += "<span style='display:none' class='language-switch' onclick='toggle_language()'>[hide]</span>"
+			result += "<span class='language-switch pointer' onclick='toggle_language()'>[show]</span>"
+			result += "<span style='display:none' class='language-switch pointer' onclick='toggle_language()'>[hide]</span>"
 			result += "<ul class='language-switch' style='display:none'>\n"
 			result += "\n".join(list)
 			result += "\n</ul></div>"

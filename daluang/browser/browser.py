@@ -33,6 +33,7 @@ class Browser:
 		self.btn_back = self.glade.get_widget("btn_back")
 		self.btn_forward = self.glade.get_widget("btn_forward")
 		self.btn_ok = self.glade.get_widget("btn_ok")
+		self.btn_search = self.glade.get_widget("btn_search")
 		self.btn_home = self.glade.get_widget("btn_home")
 		self.txt_article = self.glade.get_widget("txt_article")
 
@@ -49,6 +50,7 @@ class Browser:
 		self.btn_back.connect("clicked", self.__on_back_clicked)
 		self.btn_forward.connect("clicked", self.__on_forward_clicked)
 		self.btn_ok.connect("clicked", self.__on_ok_clicked)
+		self.btn_search.connect("clicked", self.__on_search_clicked)
 		self.btn_home.connect("clicked", self.__on_home_clicked)
 		self.txt_article.connect("activate", self.__on_article_changed)
 		self.browser.connect("location", self.__on_browser_changed)
@@ -71,6 +73,10 @@ class Browser:
 	def __on_ok_clicked(self, src):
 		text = self.txt_article.get_text()
 		self.open(text)
+
+	def __on_search_clicked(self, src):
+		text = self.txt_article.get_text()
+		self.open(text, "search")
 
 	def __on_home_clicked(self, src):
 		self.browser.load_url(self.base_addr)
@@ -113,7 +119,7 @@ class Browser:
 	def main(self):
 		gtk.main()
 
-	def open(self, article):
+	def open(self, article, type="article"):
 		article = article.strip()
 		if len(article) == 0:
 			return
@@ -126,7 +132,6 @@ class Browser:
 
 		if match:
 			lang = match.group(1)
-			type = match.group(2)
 			url = "%s/%s/%s/%s" % (self.base_addr, lang, type, article)
 			self.open_url(url)
 
