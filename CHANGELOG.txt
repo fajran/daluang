@@ -1,4 +1,4 @@
-daluang trunk - Wed, 02 Apr 2008 22:07:33 +0200
+daluang 1.5 - Sat, 05 Apr 2008 14:29:59 +0200
 
   * Add jquery.js (jquery-1.2.3.pack.js)
   * Add article.js

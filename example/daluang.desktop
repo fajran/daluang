@@ -7,3 +7,5 @@ StartupNotify=false
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;Education;Science;
+Name[id]=Peramban Offline Wikipedia
+Comment[id]=Baca Wikipedia secara offline
