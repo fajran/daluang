@@ -1,4 +1,4 @@
-daluang 1.5 - Sat, 05 Apr 2008 14:29:59 +0200
+daluang 0.1.5 - Sat, 05 Apr 2008 14:29:59 +0200
 
   * Add jquery.js (jquery-1.2.3.pack.js)
   * Add article.js
@@ -15,13 +15,13 @@ daluang 1.5 - Sat, 05 Apr 2008 14:29:59 +0200
   * Add tooltips
   * Add accelerator for article text field (Ctrl+L)
 
-daluang 1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
+daluang 0.1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
 
   * Fix desktop file (ISSUE #13)
   * Fix xapian import error (ISSUE #14)
   * Daluang 1.4.1
 
-daluang 1.4.0 - Sun, 30 Mar 2008 00:08:49 +0100
+daluang 0.1.4.0 - Sun, 30 Mar 2008 00:08:49 +0100
 
   * Xapian integration
   * Informative 404 Error page (ISSUE #4)
