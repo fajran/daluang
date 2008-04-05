@@ -10,6 +10,7 @@ daluang trunk - Wed, 02 Apr 2008 22:07:33 +0200
   * Caching system (ISSUE #17)
   * Offer online version when accessing unavailable content
   * Add additional search button
+  * Sort other languages links
 
 daluang 1.4.1 - Sun, 30 Mar 2008 12:03:12 +0200
 

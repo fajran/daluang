@@ -82,6 +82,7 @@ class Handler:
 			res = self.reader[lang]
 
 		self.parser.add_namespace(lang, self.reader[lang].get_namespaces())
+		self.parser.add_reader(self.reader[lang], lang)
 
 		return res
 

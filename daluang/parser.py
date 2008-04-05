@@ -34,17 +34,19 @@ class Parser:
 		self.__init()
 		self.__init_re()
 
-
 	def parse(self, wiki, code):
 		self.__reset()
-		
-		# TODO: use cache!
-		#if self.html != None:
-		#	return self.html
-
 		html = self.__parse_wiki(wiki, code)
-
 		return html
+
+	def parse_article(self, article, code):
+		reader = self.readers.get(code, None)
+		if reader:
+			wiki = reader.read(article)
+			return self.parse(wiki, code)
+
+	def add_reader(self, reader, code):
+		self.readers[code] = reader
 
 	def __reset(self):
 		self.nowiki = []
@@ -148,7 +150,7 @@ class Parser:
 
 		self.set_url_base('file://')
 
-		# Langauge codes
+		# Language codes
 
 		base = self.config.read('base', '/usr/share/daluang')
 		file = os.path.join(base, 'languages.txt')
@@ -157,6 +159,10 @@ class Parser:
 		for line in f:
 			(code, language) = line.strip().split("\t")
 			self.languages[code] = language
+
+		# Reader
+		
+		self.readers = {}
 
 	#
 	# Namespaces
@@ -910,6 +916,8 @@ class Parser:
 	def __make_languages(self):
 		result = ""
 		
+		self.link_translations.sort(lambda x, y: cmp(self.languages[x[0]], self.languages[y[0]]))
+
 		list = []
 		for (code, article) in self.link_translations:
 			list.append('<li><a class="int" href="/%s/article/%s/">%s</a>: %s</li>' % (code, article, self.languages[code], article))
