@@ -36,6 +36,7 @@ setup(name='daluang',
 		('share/daluang/browser/res', [
 			'data/browser/res/browser.glade', 
 			'data/browser/res/icon.svg',
+			'data/browser/res/online.svg',
 		]),
 		('share/daluang/server/res', [
 			'data/server/res/style.css', 

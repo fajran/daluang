@@ -34,6 +34,7 @@ class Browser:
 		self.btn_forward = self.glade.get_widget("btn_forward")
 		self.btn_ok = self.glade.get_widget("btn_ok")
 		self.btn_search = self.glade.get_widget("btn_search")
+		self.btn_online = self.glade.get_widget("btn_online")
 		self.btn_home = self.glade.get_widget("btn_home")
 		self.txt_article = self.glade.get_widget("txt_article")
 
@@ -50,6 +51,7 @@ class Browser:
 		self.btn_back.connect("clicked", self.__on_back_clicked)
 		self.btn_forward.connect("clicked", self.__on_forward_clicked)
 		self.btn_ok.connect("clicked", self.__on_ok_clicked)
+		self.btn_online.connect("clicked", self.__on_online_clicked)
 		self.btn_search.connect("clicked", self.__on_search_clicked)
 		self.btn_home.connect("clicked", self.__on_home_clicked)
 		self.txt_article.connect("activate", self.__on_article_changed)
@@ -73,6 +75,27 @@ class Browser:
 	def __on_ok_clicked(self, src):
 		text = self.txt_article.get_text()
 		self.open(text)
+
+	def __on_online_clicked(self, src):
+		curr = self.browser.get_location()
+
+		skip = len(self.base_addr)
+		path = curr[skip:].strip('/ ')
+		match = self.re_search.match(path)
+
+		if match:
+			lang = match.group(1)
+			type = match.group(2)
+			article = match.group(3)
+
+			url = None
+			if type == "article":
+				url = "http://%s.wikipedia.org/wiki/%s" % (lang, article)
+			elif type == "search":
+				url = "http://%s.wikipedia.org/wiki/Special:Search?search=%s" % (lang, article)
+
+			if url:
+				webbrowser.open(url)
 
 	def __on_search_clicked(self, src):
 		text = self.txt_article.get_text()
@@ -100,12 +123,27 @@ class Browser:
 
 		skip = len(self.base_addr)
 		path = curr[skip:].strip('/ ')
-		match = self.re_article.match(path)
 
+		# Change text in article text field
+
+		match = self.re_article.match(path)
 		if match:
 			article = match.group(2)
 			title = urllib.unquote(article.replace('_', ' '))
 			self.txt_article.set_text(title)
+
+		# Toggle open and search button
+
+		match = self.re_search.match(path)
+		if match:
+			status = True
+		else:
+			status = False
+
+		self.btn_ok.set_sensitive(status)
+		self.btn_search.set_sensitive(status)
+		self.btn_online.set_sensitive(status)
+
 
 	def __on_browser_title_changed(self, src, data=None):
 		title = self.browser.get_title()
