@@ -16,6 +16,6 @@ for k, v in optlist:
 	elif k == '-a':
 		addr = v
 
-print "Starting Daluang server at %s:%d.." % (addr, port)
+print _('Starting Daluang server at %(addr)s:%(port)s') % {'addr': addr, 'port': port }
 server.start(port=port, addr=addr)
 

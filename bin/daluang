@@ -44,7 +44,7 @@ def load_data():
 #
 
 def usage():
-	print """Usage: daluang <command> [cmd-opt ...]
+	print _("""Usage: daluang <command> [cmd-opt ...]
 
 Available commands:
 
@@ -52,7 +52,7 @@ Available commands:
 - index   : creates Xapian's index for a daluang data
 - list    : lists all installed wikipedia files
 - read    : reads a wikipedia entry
-- help    : help for other commands"""
+- help    : help for other commands""")
 
 #
 # Help
@@ -68,12 +68,12 @@ def cmd_help():
 		func = apps[cmd][1]
 		func()
 	else:
-		print "Available commands: %s" % (" ".join(cmds))
+		print _("Available commands: %s") % (" ".join(cmds))
 
 def usage_help():
-	print '''Need help?
+	print _('''Need help?
 	
-Usage: daluang help <command>'''
+Usage: daluang help <command>''')
 
 #
 # Index
@@ -103,7 +103,7 @@ def cmd_convert():
 	
 
 def usage_convert():
-	print """This command is used to convert a data from Wikipedia's format to Daluang own format.
+	print _("""This command is used to convert a data from Wikipedia's format to Daluang own format.
 	
 Usage: daluang convert <language> <code> <data>
 
@@ -113,7 +113,7 @@ Usage: daluang convert <language> <code> <data>
 	
 Example usage:
 
-    $ daluang convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2"""
+    $ daluang convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2""")
 
 #
 # Read
@@ -135,13 +135,13 @@ def cmd_read():
 
 	result = r.read(title)
 	if result == None:
-		print "Not found: %s" % title
+		print _("Not found: %s") % title
 	else:
 		title2, content = result
 		print content
 
 def usage_read():
-	print '''This command is used to read an article from Daluang data.
+	print _('''This command is used to read an article from Daluang data.
 	
 Usage: daluang read <datafile|code> <title>
 
@@ -150,7 +150,7 @@ Usage: daluang read <datafile|code> <title>
 Example usage:
 
     $ daluang read id.data "bandung"
-    $ daluang read id "bandung"'''
+    $ daluang read id "bandung"''')
 
 	pass
 
@@ -162,10 +162,10 @@ def cmd_list():
 	load_data()
 	
 	if len(data) == 0:
-		print "No data available"
+		print _("No data available")
 
 	else:
-		print "Available data:"
+		print _("Available data:")
 
 		cnt = 0
 		for lang in languages:
@@ -174,7 +174,7 @@ def cmd_list():
 
 
 def usage_list():
-	print '''This command is used to list installed data.
+	print _('''This command is used to list installed data.
 
 Each line will be written in the following format:
 
@@ -184,7 +184,7 @@ Example:
 
     [id] Bahasa Indonesia
 
-The value of "code" is used when you use daluang data command.'''
+The value of "code" is used when you use "read" command.''')
 
 #
 # Index
@@ -195,7 +195,7 @@ def cmd_index():
 		sys.exit(1)
 
 	if not xapian_enabled:
-		print """python-xapian doesn't exist"""
+		print _("""python-xapian doesn't exist""")
 		sys.exit(1)
 
 	data = sys.argv[2]
@@ -210,7 +210,7 @@ def cmd_index():
 	writer.index()
 
 def usage_index():
-	print """This command is used to create a Xapian index of a data.
+	print _("""This command is used to create a Xapian index of a data.
 	
 Usage: daluang index <data> <database>
 
@@ -220,7 +220,7 @@ You have to install python-xapian package in order to use this function. This op
 	
 Example usage:
 
-    $ daluang index id.data id"""
+    $ daluang index id.data id""")
 
 #
 # Main

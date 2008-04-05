@@ -1,3 +1,12 @@
+daluang trunk - Sat, 05 Apr 2008 20:45:56 +0200
+
+  * Encapsulate all strings with _() function
+  * First try of i18n
+  * Support in daluang-server (Django) is still incomplete
+  * Browser interface (glade) is still not i18n-ed
+  * Create (partial) Indonesian translation
+  * Add translation tools (derived from Django's utilities)
+
 daluang 0.1.5 - Sat, 05 Apr 2008 14:29:59 +0200
 
   * Add jquery.js (jquery-1.2.3.pack.js)

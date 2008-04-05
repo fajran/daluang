@@ -2,12 +2,15 @@
 
 import daluang
 import os
+import locale
 
 daluang_conf = daluang.Config()
 daluang_conf.init()
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+USE_I18N = True
 
 SITE_ID = 1
 # List of callables that know how to import templates from various sources.
@@ -20,3 +23,13 @@ ROOT_URLCONF = 'daluang.server.urls'
 TEMPLATE_DIRS = (
 	os.path.join(daluang_conf.read('base'), 'server/tpl'),
 )
+LOCALE_PATHS = (
+	os.path.join(daluang_conf.read('base'), 'locale'),
+)
+MIDDLEWARE_CLASSES = (
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'daluang.server.middleware.LocaleMiddleware',
+	'django.middleware.common.CommonMiddleware',
+)
+
+LANGUAGE_CODE = locale.getdefaultlocale()[0]

@@ -907,7 +907,7 @@ class Parser:
 			list.append('<a class="int" href="%s">%s</a>' % (self.url_base_article + cat[0], cat[1]))
 
 		if len(list) > 0:
-			result = '<div id="categories"><span class="title">Category:</span> '
+			result = '<div id="categories"><span class="title">' + _("Category:") + '</span> '
 			result += " | ".join(list)
 			result += '</div>'
 
@@ -923,9 +923,9 @@ class Parser:
 			list.append('<li><a class="int" href="/%s/article/%s/">%s</a>: %s</li>' % (code, article, self.languages[code], article))
 
 		if len(list) > 0:
-			result = "<div id='languages'><span class='title'>Other languages:</span> "
-			result += "<span class='language-switch pointer' onclick='toggle_language()'>[show]</span>"
-			result += "<span style='display:none' class='language-switch pointer' onclick='toggle_language()'>[hide]</span>"
+			result = "<div id='languages'><span class='title'>" + _("Other languages:") + "</span> "
+			result += "<span class='language-switch pointer' onclick='toggle_language()'>[" + _("show") + "]</span>"
+			result += "<span style='display:none' class='language-switch pointer' onclick='toggle_language()'>[" + _("hide") + "]</span>"
 			result += "<ul class='language-switch' style='display:none'>\n"
 			result += "\n".join(list)
 			result += "\n</ul></div>"

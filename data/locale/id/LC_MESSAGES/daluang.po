@@ -1,0 +1,277 @@
+# Indonesian Language
+# Copyright (C) 2008
+# This file is distributed under the same license as the Daluang package.
+# Fajran Iman Rusadi <fajran@gmail.com>, 2008.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-04-05 20:36+0200\n"
+"PO-Revision-Date: 2008-04-05 15:28+0200\n"
+"Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
+"Language-Team: Indonesian Translator\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bin/daluang:47
+msgid ""
+"Usage: daluang <command> [cmd-opt ...]\n"
+"\n"
+"Available commands:\n"
+"\n"
+"- convert : convertes a wikipedia dump file\n"
+"- index   : creates Xapian's index for a daluang data\n"
+"- list    : lists all installed wikipedia files\n"
+"- read    : reads a wikipedia entry\n"
+"- help    : help for other commands"
+msgstr ""
+"Gunakan: daluang <perintah> [cmd-opt ...]\n"
+"\n"
+"Perintah yang tersedia:\n"
+"\n"
+"- convert : mengkonversi berkas wikipedia dump\n"
+"- index   : membuat berkas indeks bagi Xapian dari data Daluang\n"
+"- list    : menampilkan seluruh berkas data Wikipedia yang terpasang\n"
+"- read    : membaca sebuah tulisan di Wikipedia\n"
+"- help    : membaca bantuan untuk perintah lain"
+
+#: bin/daluang:71
+#, python-format
+msgid "Available commands: %s"
+msgstr "Perintah yang tersedia: %s"
+
+#: bin/daluang:74
+msgid ""
+"Need help?\n"
+"\t\n"
+"Usage: daluang help <command>"
+msgstr ""
+"Butuh bantuan?\n"
+"\t\n"
+"Gunakan: daluang help <perintah>"
+
+#: bin/daluang:106
+msgid ""
+"This command is used to convert a data from Wikipedia's format to Daluang "
+"own format.\n"
+"\t\n"
+"Usage: daluang convert <language> <code> <data>\n"
+"\n"
+"    <data> is an XML database dump of Wikipedia. Usually it is written in "
+"the following format:\n"
+"\n"
+"        idwiki-20080213-pages-articles.xml.bz2\n"
+"\t\n"
+"Example usage:\n"
+"\n"
+"    $ daluang convert \"Bahasa Indonesia\" \"id\" idwiki-20080213-pages-"
+"articles.xml.bz2"
+msgstr ""
+"Perintah ini digunakan untuk mengkonversi data dari format Wikipedia menjadi "
+"format data milik Daluang.\n"
+"\t\n"
+"Gunakan: daluang convert <bahasa> <kode> <data>\n"
+"\n"
+"    <data> adalah berkas basisdata Wikipedia dalam bentuk XML. Biasanya "
+"tertulis dalam format berikut:\n"
+"\n"
+"        idwiki-20080213-pages-articles.xml.bz2\n"
+"\t\n"
+"Contoh penggunaan:\n"
+"\n"
+"    $ daluang convert \"Bahasa Indonesia\" \"id\" idwiki-20080213-pages-"
+"articles.xml.bz2"
+
+#: bin/daluang:138
+#, python-format
+msgid "Not found: %s"
+msgstr "Tidak ditemukan: %s"
+
+#: bin/daluang:144
+msgid ""
+"This command is used to read an article from Daluang data.\n"
+"\t\n"
+"Usage: daluang read <datafile|code> <title>\n"
+"\n"
+"    <datafile|code> is either a data file or a language code.\n"
+"\n"
+"Example usage:\n"
+"\n"
+"    $ daluang read id.data \"bandung\"\n"
+"    $ daluang read id \"bandung\""
+msgstr ""
+"Perintah ini digunakan untuk membaca sebuah artikel dari Daluang.\n"
+"\t\n"
+"Gunakan: daluang read <berkasdata|kode> <judul>\n"
+"\n"
+"    <berkasdata|kode> adalah berkas data atau kode bahasa.\n"
+"\n"
+"Contoh penggunaan:\n"
+"\n"
+"    $ daluang read id.data \"bandung\"\n"
+"    $ daluang read id \"bandung\""
+
+#: bin/daluang:165
+msgid "No data available"
+msgstr "Data tidak tersedia"
+
+#: bin/daluang:168
+msgid "Available data:"
+msgstr "Data yang tesedia:"
+
+#: bin/daluang:177
+msgid ""
+"This command is used to list installed data.\n"
+"\n"
+"Each line will be written in the following format:\n"
+"\n"
+"    [code] langauge\n"
+"\n"
+"Example:\n"
+"\n"
+"    [id] Bahasa Indonesia\n"
+"\n"
+"The value of \"code\" is used when you use \"read\" command."
+msgstr ""
+"Perintah ini digunakan untuk melihat data yang terpasang.\n"
+"\n"
+"Setiap baris akan ditulis dalam format berikut:\n"
+"\n"
+"    [kode] bahasa\n"
+"\n"
+"Contoh:\n"
+"\n"
+"    [id] Bahasa Indonesia\n"
+"\n"
+"Nilai dari \"kode\" digunakan saat anda menggunakan perintah \"read\"."
+
+#: bin/daluang:198
+msgid "python-xapian doesn't exist"
+msgstr "python-xapian tidak ada"
+
+#: bin/daluang:213
+msgid ""
+"This command is used to create a Xapian index of a data.\n"
+"\t\n"
+"Usage: daluang index <data> <database>\n"
+"\n"
+"    <data> is a Daluang's data and <database> is a target Xapian's "
+"database.\n"
+"\n"
+"You have to install python-xapian package in order to use this function. "
+"This operation may take very long time!\n"
+"\t\n"
+"Example usage:\n"
+"\n"
+"    $ daluang index id.data id"
+msgstr ""
+"Perintah ini digunakan untuk membuat berkas indeks Xapian dari data yang "
+"ada.\n"
+"\t\n"
+"Gunakan: daluang index <data> <basisdata>\n"
+"\n"
+"    <data> adalah data dalam Daluang dan <basisdata> adalah basis data "
+"Xapianyang dituju.\n"
+"\n"
+"Anda harus memasang paket python-xapian jika ingin menggunakan fungsi ini. "
+"Operasi ini mungkin membutuhkan waktu yang sangat lama!\n"
+"\t\n"
+"Contoh penggunaan:\n"
+"\n"
+"    $ daluang index id.data id"
+
+#: bin/daluang-server:19
+#, fuzzy, python-format
+msgid "Starting Daluang server at %(addr)s:%(port)s"
+msgstr "Menjalankan server Daluang pada %(addr)s:%(port)s"
+
+#: daluang/parser.py:910
+msgid "Category:"
+msgstr "Kategori:"
+
+#: daluang/parser.py:926
+msgid "Other languages:"
+msgstr "Bahasa lain:"
+
+#: daluang/parser.py:927
+msgid "show"
+msgstr "tampilkan"
+
+#: daluang/parser.py:928
+msgid "hide"
+msgstr "sembunyikan"
+
+#: data/server/tpl/search_result.html:7
+msgid "Search result"
+msgstr "Hasil pencarian"
+
+#: data/server/tpl/search_result.html:11
+#, python-format
+msgid "Search result for <strong>%(keywords)s</strong>:"
+msgstr "Hasil pencarian untuk <strong>%(keywords)s</strong>:"
+
+#: data/server/tpl/search_result.html:21
+#, python-format
+msgid "Daluang could not found anything about <strong>%(keywords)s</strong>."
+msgstr ""
+"Daluang tidak dapat menemukan apapun mengenai <strong>%(keywords)s</strong>."
+
+#: data/server/tpl/index.html:8
+#, fuzzy
+msgid "Available Languages"
+msgstr "Bahasa yang tesedia:"
+
+#: data/server/tpl/not_found.html:7
+#, fuzzy
+msgid "Not found"
+msgstr "Tidak ditemukan"
+
+#: data/server/tpl/not_found.html:9
+#, python-format
+msgid "Daluang doesn't have an article called <strong>%(article)s</strong>."
+msgstr "Daluang tidak memiliki artikel berjudul <strong>%(article)s</strong>."
+
+#: data/server/tpl/not_found.html:11
+msgid "Suggestions:"
+msgstr "Saran:"
+
+#: data/server/tpl/not_found.html:14
+#, python-format
+msgid "Search content for <strong>%(article)s</strong>"
+msgstr "Cari artikel mengenai <strong>%(article)s</strong>"
+
+#: data/server/tpl/not_found.html:15
+#, python-format
+msgid "Open online version of <strong>%(article)s</strong>"
+msgstr "Buka versi online dari <strong>%(article)s</strong>"
+
+#: data/server/tpl/not_found.html:16
+#, python-format
+msgid "Search wikipedia for <strong>%(article)s</strong>"
+msgstr "Cari pada wikipedia mengenai <strong>%(article)s</strong>"
+
+#: data/server/tpl/unavailable.html:3
+#, fuzzy
+msgid "Content not available!"
+msgstr "Data tidak tersedia!"
+
+#: data/server/tpl/unavailable.html:7
+#, fuzzy
+msgid "Content not available"
+msgstr "Data tidak tersedia"
+
+#: data/server/tpl/unavailable.html:9
+#, python-format
+msgid ""
+"Daluang doesn't have data for <strong>%(article)s</strong> in <strong>%"
+"(language)s</strong>."
+msgstr ""
+"Daluang tidak memiliki data mengenai <strong>%(article)s</strong> dalam "
+"<strong>%(language)s</strong>."
+
+#: data/server/tpl/unavailable.html:11
+msgid "Click here to open the online version"
+msgstr "Klik di sini untuk membuka versi online"
