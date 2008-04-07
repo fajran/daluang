@@ -17,7 +17,6 @@ SITE_ID = 1
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
 )
 ROOT_URLCONF = 'daluang.server.urls'
 TEMPLATE_DIRS = (
@@ -25,11 +24,6 @@ TEMPLATE_DIRS = (
 )
 LOCALE_PATHS = (
 	os.path.join(daluang_conf.read('base'), 'locale'),
-)
-MIDDLEWARE_CLASSES = (
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'daluang.server.middleware.LocaleMiddleware',
-	'django.middleware.common.CommonMiddleware',
 )
 
 LANGUAGE_CODE = locale.getdefaultlocale()[0]

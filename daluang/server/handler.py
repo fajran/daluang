@@ -87,8 +87,8 @@ class Handler:
 		return res
 
 	def serve_article(self, req, lang, article):
-		print _
-		print req.LANGUAGE_CODE
+		#print _
+		#print req.LANGUAGE_CODE
 
 		if not lang in self.languages:
 			return self.serve_unavailable(req, lang, article)

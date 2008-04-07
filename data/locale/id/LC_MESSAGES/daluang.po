@@ -184,7 +184,7 @@ msgstr ""
 "    $ daluang index id.data id"
 
 #: bin/daluang-server:19
-#, fuzzy, python-format
+#, python-format
 msgid "Starting Daluang server at %(addr)s:%(port)s"
 msgstr "Menjalankan server Daluang pada %(addr)s:%(port)s"
 
@@ -220,12 +220,12 @@ msgstr ""
 "Daluang tidak dapat menemukan apapun mengenai <strong>%(keywords)s</strong>."
 
 #: data/server/tpl/index.html:8
-#, fuzzy
+#, python-format
 msgid "Available Languages"
 msgstr "Bahasa yang tesedia:"
 
 #: data/server/tpl/not_found.html:7
-#, fuzzy
+#, python-format
 msgid "Not found"
 msgstr "Tidak ditemukan"
 
@@ -254,12 +254,12 @@ msgid "Search wikipedia for <strong>%(article)s</strong>"
 msgstr "Cari pada wikipedia mengenai <strong>%(article)s</strong>"
 
 #: data/server/tpl/unavailable.html:3
-#, fuzzy
+#, python-format
 msgid "Content not available!"
 msgstr "Data tidak tersedia!"
 
 #: data/server/tpl/unavailable.html:7
-#, fuzzy
+#, python-format
 msgid "Content not available"
 msgstr "Data tidak tersedia"
 
