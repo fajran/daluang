@@ -2,55 +2,98 @@
 
 from distutils.core import setup
 
+#
+# Data files
+#
+
+data_files = []
+
+# Binaries
+
+bins = ['daluang', 'daluang-server', 'daluang-browser', 'daluang-browser-bin']
+files = []
+for bin in bins:
+	files.append('bin/%s' % bin)
+data_files.append(('bin', files))
+
+# Locale files
+
+domain = 'daluang'
+languages = ['id']
+for lang in languages:
+	data_files.append((
+		'share/daluang/locale/%s/LC_MESSAGES' % lang, 
+		[
+			'data/locale/%s/LC_MESSAGES/%s.mo' % (lang, domain),
+			'data/locale/%s/LC_MESSAGES/django.mo' % (lang)
+		]
+	))
+
+# Icons
+
+sizes = [16, 22, 24, 32, 48, 64]
+for size in sizes:
+	data_files.append((
+		'share/icons/hicolor/%dx%d/apps' % (size, size),
+		['data/browser/icons/%dx%d/apps/daluang.png' % (size, size)]
+	))
+data_files.append(
+	('share/icons/hicolor/scalable/apps', ['data/browser/icons/scalable/apps/daluang.svg'])
+)
+
+# Browser resources
+
+res = ['browser.glade', 'icon.svg', 'online.svg']
+files = []
+for file in res:
+	files.append('data/browser/res/%s' % file)
+data_files.append(('share/daluang/browser/res', files))
+
+# Server resources
+
+res = ['style.css', 'index.css', 'ext.png', 'jquery.js', 'article.js']
+files = []
+for file in res:
+	files.append('data/server/res/%s' % file)
+data_files.append(('share/daluang/server/res', files))
+
+res = ['index.html', 'article.html', 'search_result.html', 'not_found.html', 'unavailable.html']
+files = []
+for file in res:
+	files.append('data/server/tpl/%s' % file)
+data_files.append(('share/daluang/server/tpl', files))
+
+# Other files
+
+data_files += [
+	('share/daluang', [
+		'data/languages.txt'
+	]),
+	('share/daluang/example', [
+		'example/daluang.conf'
+	]),
+	('share/applications', [
+		'example/daluang.desktop'
+	]),
+	('share/daluang/data', []),
+	('share/daluang/index', []),
+	('share/daluang/tools', [
+		'tools/compile-messages.py',
+		'tools/make-messages.py',
+	]),
+]
+
+#
+# Setup
+#
+
 setup(name='daluang',
-	version='0.1.5',
+	version='0.2',
 	description='Wikipedia Dump Reader',
 	author='Fajran Iman Rusadi',
 	author_email='fajran@gmail.com',
+	url='http://code.google.com/p/daluang/',
+	download_url='http://code.google.com/p/daluang/downloads/list',
 	packages=['daluang', 'daluang.browser', 'daluang.server', 'daluang.search'],
-	data_files=[
-		('bin', [
-			'bin/daluang', 
-			'bin/daluang-server', 
-			'bin/daluang-browser', 
-			'bin/daluang-browser-bin'
-		]),
-		('share/daluang', [
-			'data/languages.txt'
-		]),
-		('share/daluang/example', [
-			'example/daluang.conf'
-		]),
-		('share/applications', [
-			'example/daluang.desktop'
-		]),
-		('share/daluang/data', []),
-		('share/daluang/index', []),
-		('share/icons/hicolor/16x16/apps', ['data/browser/icons/16x16/apps/daluang.png']),
-		('share/icons/hicolor/22x22/apps', ['data/browser/icons/22x22/apps/daluang.png']),
-		('share/icons/hicolor/24x24/apps', ['data/browser/icons/24x24/apps/daluang.png']),
-		('share/icons/hicolor/32x32/apps', ['data/browser/icons/32x32/apps/daluang.png']),
-		('share/icons/hicolor/48x48/apps', ['data/browser/icons/48x48/apps/daluang.png']),
-		('share/icons/hicolor/64x64/apps', ['data/browser/icons/64x64/apps/daluang.png']),
-		('share/icons/hicolor/scalable/apps', ['data/browser/icons/scalable/apps/daluang.svg']),
-		('share/daluang/browser/res', [
-			'data/browser/res/browser.glade', 
-			'data/browser/res/icon.svg',
-			'data/browser/res/online.svg',
-		]),
-		('share/daluang/server/res', [
-			'data/server/res/style.css', 
-			'data/server/res/index.css',
-			'data/server/res/ext.png',
-			'data/server/res/jquery.js',
-			'data/server/res/article.js'
-		]),
-		('share/daluang/server/tpl', [
-			'data/server/tpl/index.html',
-			'data/server/tpl/article.html',
-			'data/server/tpl/search_result.html',
-			'data/server/tpl/not_found.html'
-			'data/server/tpl/unavailable.html'
-		])
-	]
+	data_files=data_files
 )

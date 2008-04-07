@@ -1,8 +1,11 @@
-daluang trunk - Mon, 07 Apr 2008 22:54:04 +0200
+daluang 0.2 - Tue, 08 Apr 2008 00:06:38 +0200
 
   * Encapsulate all strings with _() function
   * Create Indonesian translation
   * Add translation tools (derived from Django's utilities)
+  * Refactor setup.py
+  * Fix debian files
+  * Ready for release 0.2
 
 daluang 0.1.5 - Sat, 05 Apr 2008 14:29:59 +0200
 
