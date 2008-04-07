@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-05 20:36+0200\n"
+"POT-Creation-Date: 2008-04-07 22:39+0200\n"
 "PO-Revision-Date: 2008-04-05 15:28+0200\n"
 "Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
 "Language-Team: Indonesian Translator\n"
@@ -204,6 +204,34 @@ msgstr "tampilkan"
 msgid "hide"
 msgstr "sembunyikan"
 
+#: data/browser/res/browser.glade:1
+msgid "Article title"
+msgstr "Judul artikel"
+
+#: data/browser/res/browser.glade:2
+msgid "Back"
+msgstr "Mundur"
+
+#: data/browser/res/browser.glade:3
+msgid "Forward"
+msgstr "Maju"
+
+#: data/browser/res/browser.glade:4
+msgid "Language list page"
+msgstr "Halaman daftar bahasa"
+
+#: data/browser/res/browser.glade:5
+msgid "Open article"
+msgstr "Buka artikel"
+
+#: data/browser/res/browser.glade:6
+msgid "Open online version"
+msgstr "Buka versi online"
+
+#: data/browser/res/browser.glade:7
+msgid "Search"
+msgstr "Cari"
+
 #: data/server/tpl/search_result.html:7
 msgid "Search result"
 msgstr "Hasil pencarian"
@@ -220,12 +248,10 @@ msgstr ""
 "Daluang tidak dapat menemukan apapun mengenai <strong>%(keywords)s</strong>."
 
 #: data/server/tpl/index.html:8
-#, python-format
 msgid "Available Languages"
-msgstr "Bahasa yang tesedia:"
+msgstr "Bahasa Yang Tesedia:"
 
 #: data/server/tpl/not_found.html:7
-#, python-format
 msgid "Not found"
 msgstr "Tidak ditemukan"
 
@@ -254,12 +280,10 @@ msgid "Search wikipedia for <strong>%(article)s</strong>"
 msgstr "Cari pada wikipedia mengenai <strong>%(article)s</strong>"
 
 #: data/server/tpl/unavailable.html:3
-#, python-format
 msgid "Content not available!"
 msgstr "Data tidak tersedia!"
 
 #: data/server/tpl/unavailable.html:7
-#, python-format
 msgid "Content not available"
 msgstr "Data tidak tersedia"
 

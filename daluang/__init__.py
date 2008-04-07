@@ -20,9 +20,17 @@ LOCALE_DIR = os.path.join(config.read("base", "/usr/share/daluang"), "locale")
 import locale
 import gettext
 
+modules = [gettext]
+try:
+	import gtk.glade
+	modules.append(gtk.glade)
+except ImportError:
+	pass
+
 locale.setlocale(locale.LC_ALL, None)
-gettext.bindtextdomain(APPLICATION, LOCALE_DIR)
-gettext.textdomain(APPLICATION)
+for module in modules:
+	module.bindtextdomain(APPLICATION, LOCALE_DIR)
+	module.textdomain(APPLICATION)
 
 import __builtin__
 __builtin__._ = gettext.gettext

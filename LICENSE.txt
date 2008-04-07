@@ -13,6 +13,8 @@ Other works that are used in this project:
 
 - jQuery (GNU General Public License v2)
 
+- compile-message.py and make-message.py scripts are derived from
+  Django (BSD License)
 
 ======================================================================
 

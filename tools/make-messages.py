@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-# Need to ensure that the i18n framework is enabled
 from django.conf import settings
 settings.configure(USE_I18N = True)
 
@@ -10,18 +9,27 @@ import os
 import sys
 import getopt
 
-pythonize_re = re.compile(r'\n\s*//')
-
-binfiles = ["daluang", "daluang-server", "daluang-browser", "daluang-browser-bin"]
-
 def make_messages():
+
+	extra_files = [
+		'./bin/daluang',
+		'./bin/daluang-server',
+		'./bin/daluang-browser',
+		'./bin/daluang-browser-bin'
+	]
+
+	include_re = re.compile('.+\.(py|html|glade)$')
+	exclude_re = re.compile('.+\.svn.*')
+	
+	domain = 'daluang'
+	djangodomain = 'django'
+
 	localedir = 'data/locale'
 
 	(opts, args) = getopt.getopt(sys.argv[1:], 'l:va')
 
 	lang = None
 	verbose = False
-	domain = "daluang"
 	all = False
 
 	for o, v in opts:
@@ -59,28 +67,47 @@ def make_messages():
 
 		for (dirpath, dirnames, filenames) in os.walk("."):
 			for file in filenames:
-				if file.endswith('.py') or file.endswith('.html') or (dirpath.startswith('./bin') and (file in binfiles)):
+				match_include = include_re.match(file)
+				match_exclude = exclude_re.match(file)
+
+				if (match_include or (os.path.join(dirpath, file) in extra_files)) and not match_exclude:
 					thefile = file
+
 					if file.endswith('.html'):
 						src = open(os.path.join(dirpath, file), "rb").read()
 						open(os.path.join(dirpath, '%s.py' % file), "wb").write(templatize(src))
 						thefile = '%s.py' % file
-					if verbose: sys.stdout.write('processing file %s in %s\n' % (file, dirpath))
-					cmd = 'xgettext %s -d %s -L Python --keyword=gettext_noop --keyword=gettext_lazy --keyword=ngettext_lazy --from-code UTF-8 -o - "%s"' % (
-						os.path.exists(potfile) and '--omit-header' or '', domain, os.path.join(dirpath, thefile))
+
+					elif file.endswith('.glade'):
+						src = os.path.join(dirpath, file)
+						cmd = "intltool-extract --type=gettext/glade %s" % src
+						print cmd
+						os.popen3(cmd, 'b')
+						thefile = '%s.h' % file
+
+					if verbose: 
+						sys.stdout.write('processing file %s in %s\n' % (file, dirpath))
+
+					cmd = 'xgettext %s -d %s -L Python --keyword=N_ --keyword=gettext_noop --keyword=gettext_lazy --keyword=ngettext_lazy --from-code UTF-8 -o - "%s"' % (
+					os.path.exists(potfile) and '--omit-header' or '', domain, os.path.join(dirpath, thefile))
+
 					(stdin, stdout, stderr) = os.popen3(cmd, 'b')
 					msgs = stdout.read()
 					errors = stderr.read()
+
 					if errors:
 						print "errors happened while running xgettext on %s" % file
 						print errors
 						sys.exit(8)
+
 					if thefile != file:
 						old = '#: '+os.path.join(dirpath, thefile)[2:]
 						new = '#: '+os.path.join(dirpath, file)[2:]
 						msgs = msgs.replace(old, new)
+
 					if msgs:
 						open(potfile, 'ab').write(msgs)
+
 					if thefile != file:
 						os.unlink(os.path.join(dirpath, thefile))
 
