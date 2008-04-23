@@ -44,6 +44,8 @@ class Parser:
 		if reader:
 			wiki = reader.read(article)
 			return self.parse(wiki, code)
+		else:
+			return None
 
 	def add_reader(self, reader, code):
 		self.readers[code] = reader
@@ -471,7 +473,14 @@ class Parser:
 
 	def __make_ilink(self, article, label):
 		article = (article[0].upper() + article[1:]).replace(' ', '_')
-		return '<a href="%s" class="int">%s</a>' % (self.url_base_article + article, label)
+		reader = self.readers.get(self.code, None)
+		if reader:
+			if reader.check_title_match(article):
+				return '<a href="%s" class="int">%s</a>' % (self.url_base_article + article, label)
+			else:
+				return '<a href="%s" class="int unavailable">%s</a>' % (self.url_base_article + article, label)
+		else:
+			return '<a href="%s" class="int">%s</a>' % (self.url_base_article + article, label)
 
 	def __parse_elink(self, text):
 		text = text.strip()

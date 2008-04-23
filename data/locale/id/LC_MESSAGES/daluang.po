@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-07 22:39+0200\n"
+"POT-Creation-Date: 2008-04-24 00:14+0200\n"
 "PO-Revision-Date: 2008-04-05 15:28+0200\n"
 "Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
 "Language-Team: Indonesian Translator\n"
@@ -120,7 +120,7 @@ msgstr "Data tidak tersedia"
 
 #: bin/daluang:168
 msgid "Available data:"
-msgstr "Data yang tesedia:"
+msgstr "Data yang tersedia:"
 
 #: bin/daluang:177
 msgid ""
@@ -174,7 +174,7 @@ msgstr ""
 "Gunakan: daluang index <data> <basisdata>\n"
 "\n"
 "    <data> adalah data dalam Daluang dan <basisdata> adalah basis data "
-"Xapianyang dituju.\n"
+"Xapian yang dituju.\n"
 "\n"
 "Anda harus memasang paket python-xapian jika ingin menggunakan fungsi ini. "
 "Operasi ini mungkin membutuhkan waktu yang sangat lama!\n"
@@ -188,19 +188,19 @@ msgstr ""
 msgid "Starting Daluang server at %(addr)s:%(port)s"
 msgstr "Menjalankan server Daluang pada %(addr)s:%(port)s"
 
-#: daluang/parser.py:910
+#: daluang/parser.py:919 build/lib/daluang/parser.py:910
 msgid "Category:"
 msgstr "Kategori:"
 
-#: daluang/parser.py:926
+#: daluang/parser.py:935 build/lib/daluang/parser.py:926
 msgid "Other languages:"
 msgstr "Bahasa lain:"
 
-#: daluang/parser.py:927
+#: daluang/parser.py:936 build/lib/daluang/parser.py:927
 msgid "show"
 msgstr "tampilkan"
 
-#: daluang/parser.py:928
+#: daluang/parser.py:937 build/lib/daluang/parser.py:928
 msgid "hide"
 msgstr "sembunyikan"
 

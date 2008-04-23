@@ -7,6 +7,8 @@ import sqlite3
 import sys
 import datetime
 
+DATA_VERSION = '0.3'
+
 class Converter:
 	
 	def __init__(self, input, output):
@@ -30,15 +32,15 @@ class Converter:
 		self.dbc.execute('''INSERT INTO data (block, data) VALUES (?, ?)''', values)
 
 	def __add_toc(self, title, block_number, start, length):
-		values = (title.strip(), block_number, start, length)
-		self.dbc.execute('''INSERT INTO titles (title, block, start, length) VALUES (?, ?, ?, ?)''', values)
+		values = (title.strip(), title.strip().lower(), block_number, start, length)
+		self.dbc.execute('''INSERT INTO titles (title, title_lower, block, start, length) VALUES (?, ?, ?, ?, ?)''', values)
 
 	def __add_namespace(self, key, namespace):
 		values = (int(key), namespace)
 		self.dbc.execute('''INSERT INTO namespaces (key, namespace) VALUES (?, ?)''', values)
 
 	def __add_info(self, key, value):
-		values = (key, value)
+		values = (key, str(value))
 		self.dbc.execute('''INSERT INTO info (key, value) VALUES (?, ?)''', values)
 
 	def set_code(self, code):
@@ -57,7 +59,7 @@ class Converter:
 		self.dbc = self.db.cursor()
 
 		self.dbc.execute('''CREATE TABLE data (block INTEGER, data BLOB)''')
-		self.dbc.execute('''CREATE TABLE titles (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, block INTEGER, start INTEGER, length INTEGER)''')
+		self.dbc.execute('''CREATE TABLE titles (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, title_lower STRING, block INTEGER, start INTEGER, length INTEGER)''')
 		self.dbc.execute('''CREATE TABLE namespaces (key INTEGER, namespace STRING)''')
 		self.dbc.execute('''CREATE TABLE info (key STRING PRIMARY KEY, value STRING)''')
 
@@ -69,6 +71,7 @@ class Converter:
 		self.__add_info("language", self.info_language)
 		self.__add_info("code", self.info_code)
 		self.__add_info("timestamp", self.info_timestamp)
+		self.__add_info("version", DATA_VERSION)
 
 		max_block_size = 900 * 1024
 
@@ -154,6 +157,7 @@ class Converter:
 			self.__add_info(key, metadata[key])
 
 		self.dbc.execute('''CREATE INDEX titles_index ON titles (title)''')
+		self.dbc.execute('''CREATE INDEX titles_lower_index ON titles (title_lower)''')
 
 		self.db.commit()
 		self.db.close()

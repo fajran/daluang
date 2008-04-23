@@ -7,6 +7,10 @@ from daluang.locator import Locator
 from daluang.config import Config
 from daluang.cache import Cache
 
+# Version information
+
+VERSION = '0.3'
+
 # Localization support
 
 import os

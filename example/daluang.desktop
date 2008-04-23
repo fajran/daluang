@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Daluang Wikipedia Offline Browser
+Name=Daluang - Wikipedia Offline Browser
 Comment=Read Wikipedia content offline
 Exec=daluang-browser
 Icon=daluang
@@ -7,5 +7,5 @@ StartupNotify=false
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;Education;Science;
-Name[id]=Peramban Offline Wikipedia
+Name[id]=Daluang - Peramban Offline Wikipedia
 Comment[id]=Baca Wikipedia secara offline

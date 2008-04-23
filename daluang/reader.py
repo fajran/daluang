@@ -101,5 +101,12 @@ class Reader:
 			return row[0], row[1], row[2], row[3]
 		else:
 			return None
+
+	def check_title_match(self, title):
+		title = title.strip().lower().replace('_', ' ')
+		self.dbc.execute('SELECT id FROM titles WHERE title_lower=?', (title,))
+		row = self.dbc.fetchone()
+
+		return row != None
 			
 
