@@ -5,12 +5,20 @@
 <link rel="stylesheet" type="text/css" href="/+res/style.css"/>
 <link rel="stylesheet" type="text/css" href="/+res/index.css"/>
 </head><body><div id="c">
+
+{% if languages %}
 <h1>{% blocktrans %}Available Languages{% endblocktrans %}</h1>
 
 <ul id="lang">
-{% for item in languages %}
+{% for item in languages|dictsort:"lang" %}
 <li><a href="/{{ item.code }}/">{{ item.lang }}</a></li>
 {% endfor %}
 </ul>
+
+{% else %}
+<h1>{% blocktrans %}No data available{% endblocktrans %}</h1>
+
+<p>{% blocktrans %}Please install some data.{% endblocktrans %}</p>
+{% endif %}
 
 </div></body></html>

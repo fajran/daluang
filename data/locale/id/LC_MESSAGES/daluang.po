@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-24 00:14+0200\n"
+"POT-Creation-Date: 2008-04-24 00:20+0200\n"
 "PO-Revision-Date: 2008-04-05 15:28+0200\n"
 "Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
 "Language-Team: Indonesian Translator\n"
@@ -114,7 +114,7 @@ msgstr ""
 "    $ daluang read id.data \"bandung\"\n"
 "    $ daluang read id \"bandung\""
 
-#: bin/daluang:165
+#: bin/daluang:165 data/server/tpl/index.html:19
 msgid "No data available"
 msgstr "Data tidak tersedia"
 
@@ -247,9 +247,13 @@ msgid "Daluang could not found anything about <strong>%(keywords)s</strong>."
 msgstr ""
 "Daluang tidak dapat menemukan apapun mengenai <strong>%(keywords)s</strong>."
 
-#: data/server/tpl/index.html:8
+#: data/server/tpl/index.html:10
 msgid "Available Languages"
 msgstr "Bahasa Yang Tesedia:"
+
+#: data/server/tpl/index.html:21
+msgid "Please install some data."
+msgstr "Harap pasang beberapa data."
 
 #: data/server/tpl/not_found.html:7
 msgid "Not found"
