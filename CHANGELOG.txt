@@ -1,4 +1,4 @@
-daluang trunk - Thu, 24 Apr 2008 00:11:49 +0200
+daluang trunk - Fri, 25 Apr 2008 21:15:39 +0200
 
   * Update browser.glade
   * Fix typos (ISSUE #26)
@@ -6,6 +6,7 @@ daluang trunk - Thu, 24 Apr 2008 00:11:49 +0200
   * Add version information in data file (ISSUE #22)
   * No data installed message (ISSUE #27)
   * Sorted language list
+  * Open external browser confirmation (ISSUE #28)
 
 daluang 0.2 - Tue, 08 Apr 2008 00:06:38 +0200
 

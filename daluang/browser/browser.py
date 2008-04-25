@@ -18,35 +18,36 @@ class Browser:
 		self.config = Config()
 		self.config.init()
 
-		self.gladefile = os.path.join(self.config.read('base', '/usr/share/daluang'), "browser/res/browser.glade")
-		self.glade = gtk.glade.XML(self.gladefile)
-
-		self.__init_gui()
-		self.__init_signal()
+		self.__init_gui_browser()
+		self.__init_gui_dialog()
 
 		self.re_article = re.compile(r'([^/]+)/article/([^/]+)(/|$)')
 		self.re_search = re.compile(r'([^/]+)/(article|search)/([^/]+)(/|$)')
 
-	def __init_gui(self):
-		self.window = self.glade.get_widget("window")
+		self.open_external_browser = None
 
-		self.btn_back = self.glade.get_widget("btn_back")
-		self.btn_forward = self.glade.get_widget("btn_forward")
-		self.btn_ok = self.glade.get_widget("btn_ok")
-		self.btn_search = self.glade.get_widget("btn_search")
-		self.btn_online = self.glade.get_widget("btn_online")
-		self.btn_home = self.glade.get_widget("btn_home")
-		self.txt_article = self.glade.get_widget("txt_article")
+	def __init_gui_browser(self):
+		file = os.path.join(self.config.read('base', '/usr/share/daluang'), "browser/res/browser.glade")
+		glade = gtk.glade.XML(file)
+
+		self.window = glade.get_widget("window")
+
+		self.btn_back = glade.get_widget("btn_back")
+		self.btn_forward = glade.get_widget("btn_forward")
+		self.btn_ok = glade.get_widget("btn_ok")
+		self.btn_search = glade.get_widget("btn_search")
+		self.btn_online = glade.get_widget("btn_online")
+		self.btn_home = glade.get_widget("btn_home")
+		self.txt_article = glade.get_widget("txt_article")
 
 		self.browser = gtkmozembed.MozEmbed()
 
-		browser_container = self.glade.get_widget("browser_container")
+		browser_container = glade.get_widget("browser_container")
 		browser_container.pack_start(self.browser)
 
 		self.browser.show()
 		self.browser.load_url(self.base_addr)
 
-	def __init_signal(self):
 		self.window.connect("destroy", self.__on_window_destroy)
 		self.btn_back.connect("clicked", self.__on_back_clicked)
 		self.btn_forward.connect("clicked", self.__on_forward_clicked)
@@ -60,6 +61,15 @@ class Browser:
 		self.browser.connect("title", self.__on_browser_title_changed)
 		self.browser.connect("net-stop", self.__on_browser_complete)
 	
+
+	def __init_gui_dialog(self):
+		file = os.path.join(self.config.read('base', '/usr/share/daluang'), "browser/res/external.glade")
+		glade = gtk.glade.XML(file)
+
+		self.dialog_external = glade.get_widget('dialog')
+		self.dialog_external_url = glade.get_widget('lbl_url')
+		self.dialog_external.connect("close", self.__on_dialog_external_closed)
+
 	# Signals 
 	def __on_window_destroy(self, src):
 		gtk.main_quit()
@@ -95,7 +105,7 @@ class Browser:
 				url = "http://%s.wikipedia.org/wiki/Special:Search?search=%s" % (lang, article)
 
 			if url:
-				webbrowser.open(url)
+				self.__open_external_browser(url)
 
 	def __on_search_clicked(self, src):
 		text = self.txt_article.get_text()
@@ -115,7 +125,7 @@ class Browser:
 		if uri.startswith(self.base_addr):
 			return False
 		else:
-			webbrowser.open(uri)
+			self.__open_external_browser(uri)
 			return True
 
 	def __on_browser_complete(self, src, data=None):
@@ -153,7 +163,33 @@ class Browser:
 		self.btn_back.set_sensitive(self.browser.can_go_back())
 		self.btn_forward.set_sensitive(self.browser.can_go_forward())
 
+	def __on_dialog_external_closed(self, src):
+		self.dialog_external.hide()
+
+	# Misc
+
+	def __open_external_browser(self, uri):
+		
+		if self.open_external_browser == None:
+			self.dialog_external_url.set_text(uri)
+
+			rid = self.dialog_external.run()
+
+			self.dialog_external.hide()
+
+			action = rid > 0
+
+			if rid == 2:
+				self.open_external_browser = action
+
+		else:
+			action = self.open_external_browser
+
+		if action == True:
+			webbrowser.open(uri)
+
 	# Main
+
 	def main(self):
 		gtk.main()
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-24 00:20+0200\n"
+"POT-Creation-Date: 2008-04-25 21:11+0200\n"
 "PO-Revision-Date: 2008-04-05 15:28+0200\n"
 "Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
 "Language-Team: Indonesian Translator\n"
@@ -203,6 +203,38 @@ msgstr "tampilkan"
 #: daluang/parser.py:937 build/lib/daluang/parser.py:928
 msgid "hide"
 msgstr "sembunyikan"
+
+#: data/browser/res/external.glade:1
+msgid "Always"
+msgstr "Selalu"
+
+#: data/browser/res/external.glade:2
+msgid "Do you want to continue?"
+msgstr "Apakah Anda ingin melanjutkan?"
+
+#: data/browser/res/external.glade:3
+msgid "No"
+msgstr "Tidak"
+
+#: data/browser/res/external.glade:4
+msgid "Open external browser?"
+msgstr "Buka peramban eksternal?"
+
+#: data/browser/res/external.glade:5
+msgid "Yes"
+msgstr "Ya"
+
+#: data/browser/res/external.glade:6
+msgid ""
+"You clicked an external link and Daluang is going to open it on external "
+"browser."
+msgstr ""
+"Anda mengklik sebuah tautan eksternal dan Daluang akan membuka peramban internet"
+"untuk membukanya."
+
+#: data/browser/res/external.glade:7
+msgid "http://example.com/article/"
+msgstr "http://example.com/article/"
 
 #: data/browser/res/browser.glade:1
 msgid "Article title"
