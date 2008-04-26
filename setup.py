@@ -43,7 +43,7 @@ data_files.append(
 
 # Browser resources
 
-res = ['browser.glade', 'icon.svg', 'online.svg']
+res = ['browser.glade', 'external.glade', 'icon.svg', 'online.svg']
 files = []
 for file in res:
 	files.append('data/browser/res/%s' % file)
