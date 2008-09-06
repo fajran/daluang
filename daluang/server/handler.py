@@ -9,7 +9,6 @@ from mako.lookup import TemplateLookup
 
 import urllib
 
-
 config = Config()
 config.init()
 
@@ -41,6 +40,8 @@ class Handler:
 
 		self.parser = Parser()
 		self.cache = Cache()
+
+		self.mime_types = {}
 
 		# Language index
 		file = os.path.join(base_dir, 'languages.txt')
@@ -136,7 +137,7 @@ class Handler:
 		article = self.__filter_article(article)
 		article = article.replace('_', ' ')
 
-		template = self.template.get_template('unavailable.html')
+		template = self.template.get_template('unavailable.tpl')
 		html = template.render(
 			article=article,
 			lang=lang,
@@ -159,7 +160,6 @@ class Handler:
 		return self._response(req, html, code=404)
 
 	def _redirect(self, req, target):
-		print "redirect:", target
 		req.send_response(307)
 		req.send_header('location', target)
 		req.end_headers()
@@ -192,18 +192,55 @@ class Handler:
 		)
 		self._response(req, html)
 
+	def _load_mime(self):
+		
+		if not os.path.exists('/etc/mime.types'):
+			global mime_types
+			self.mime_types = mime_types
+
+		else:
+			self.mime_types = {}
+
+			re_split = re.compile(u'\s+')
+
+			f = open('/etc/mime.types')
+			for line in f:
+				line = line.strip()
+				if len(line) > 0 and line[0] == '#':
+					continue
+
+				p = re_split.split(line)
+				mime = p[0]
+				
+				for ext in p[1:]:
+					self.mime_types[ext] = mime
+
+		self.mime_types[''] = 'text/plain'
+
+	def _get_mime(self, fname):
+		p = fname.split('.')
+		
+		if not self.mime_types:
+			self._load_mime()
+
+		if len(p) > 0:
+			ext = p[-1]
+			mime = self.mime_types.get(ext, self.mime_types[''])
+		else:
+			mime = self.mime_types['']
+
+		return mime
+
 	def serve_static(self, req, path):
 		global resource_dir, mime_types
 
-		p = path.split('.')
-		if len(p) > 0:
-			ext = p[-1]
-			mime = mime_types.get(ext, 'text/plain')
-		else:
-			mime = 'text/plain'
+		mime = self._get_mime(path)
 
-		# TODO: check file existance
-		f = open(os.path.join(resource_dir, path))
+		fname = os.path.join(resource_dir, path)
+		if not os.path.exists(fname):
+			return self._response(req, "Not found", code=404)
+
+		f = open(fname)
 
 		req.send_response(200)
 		req.send_header('Content-type', mime)
@@ -219,12 +256,7 @@ class Handler:
 		keywords = keywords.replace('_', ' ')
 
 		if keywords == None or keywords.strip() == "":
-			# FIXME: search_form.tpl is not available
-			template = self.template.get_template('search_form.tpl')
-			html = template.render(
-				languages=data.values()
-			)
-			return self._response(req, html)
+			return self._redirect(req, self.__get_main_page(lang))
 		
 		reader = self.__load_reader(lang)
 			
