@@ -3,11 +3,12 @@
 import os
 from daluang import Config, Reader, Parser, Locator, Cache
 from daluang.search import Finder
-from django.template.loader import get_template
-from django.template import Context
-from django.conf.urls.defaults import *
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
 import re
+
+from mako.lookup import TemplateLookup
+
+import urllib
+
 
 config = Config()
 config.init()
@@ -20,6 +21,14 @@ resource_dir = os.path.join(server_dir, 'res')
 template_dir = os.path.join(server_dir, 'tpl')
 
 handler = None
+
+mime_types = {
+	'css': 'text/css',
+	'html': 'text/html',
+	'jpeg': 'image/jpeg',
+	'jpg': 'image/jpeg',
+	'png': 'image/png'
+}
 
 class Handler:
 	
@@ -40,6 +49,10 @@ class Handler:
 		for line in f:
 			(code, lang) = line.strip().split("\t")
 			self.language[code] = lang
+
+		# Template
+		global template_dir
+		self.template = TemplateLookup(directories=[template_dir])
 
 	def __get_main_page(self, lang):
 		reader = self.__load_reader(lang)
@@ -91,11 +104,11 @@ class Handler:
 		#print req.LANGUAGE_CODE
 
 		if not lang in self.languages:
-			return self.serve_unavailable(req, lang, article)
+			return self._redirect(req, '/')
 
 		article = self.__filter_article(article)
 		if article == None:
-			return HttpResponseRedirect(self.__get_main_page(lang))
+			return self._redirect(req, self.__get_main_page(lang))
 
 		reader = self.__load_reader(lang)
 	
@@ -110,73 +123,108 @@ class Handler:
 			content = self.parser.parse(wiki, lang)
 			self.cache.store(wiki, content)
 		
-		template = get_template('article.html')
-		html = template.render(Context({
-			'title': title,
-			'content': content,
-			'lang': lang
-		}))
+		template = self.template.get_template('article.tpl')
+		html = template.render(
+			title=title,
+			content=content,
+			lang=lang
+		)
 	
-		return HttpResponse(html)
+		return self._response(req, html)
 
 	def serve_unavailable(self, req, lang, article):
 		article = self.__filter_article(article)
 		article = article.replace('_', ' ')
 
-		template = get_template('unavailable.html')
-		html = template.render(Context({
-			'article': article,
-			'lang': lang,
-			'language': self.language[lang]
-		}))
-		
-		return HttpResponse(html)
+		template = self.template.get_template('unavailable.html')
+		html = template.render(
+			article=article,
+			lang=lang,
+			language=self.language[lang]
+		)
+
+		self._response(req, html)
 
 	def serve_not_found(self, req, lang, article):
 
 		article = self.__filter_article(article)
 		article = article.replace('_', ' ')
 
-		template = get_template('not_found.html')
-		html = template.render(Context({
-			'article': article,
-			'lang': lang
-		}))
+		template = self.template.get_template('not_found.tpl')
+		html = template.render(
+			article=article,
+			lang=lang
+		)
 	
-		return HttpResponseNotFound(html)
+		return self._response(req, html, code=404)
+
+	def _redirect(self, req, target):
+		print "redirect:", target
+		req.send_response(307)
+		req.send_header('location', target)
+		req.end_headers()
+
+		return True
+
+	def _response(self, req, data, mime="text/html", code=200):
+		req.send_response(code)
+		req.send_header('content-type', mime)
+		req.end_headers()
+		req.wfile.write(data)
+
+		return True
 	
 	def serve_misc(self, req, lang, item):
 		if not lang in self.languages:
-			return HttpResponseRedirect('/')
+			return self._redirect(req, '/')
 	
 		html = ""
 		if item == None:
-			return HttpResponseRedirect(self.__get_main_page(lang))
+			return self._redirect(req, self.__get_main_page(lang))
 			
-		return HttpResponse(html)
+		return self._response(req, html, 'text/html')
 	
 	def serve_index(self, req):
 	
-		template = get_template('index.html')
-		html = template.render(Context({
-			'languages': self.data.values()
-		}))
-	
-		return HttpResponse(html)
+		template = self.template.get_template("index.tpl")
+		html = template.render(
+			languages=self.data.values()
+		)
+		self._response(req, html)
+
+	def serve_static(self, req, path):
+		global resource_dir, mime_types
+
+		p = path.split('.')
+		if len(p) > 0:
+			ext = p[-1]
+			mime = mime_types.get(ext, 'text/plain')
+		else:
+			mime = 'text/plain'
+
+		# TODO: check file existance
+		f = open(os.path.join(resource_dir, path))
+
+		req.send_response(200)
+		req.send_header('Content-type', mime)
+		req.end_headers()
+
+		req.wfile.write(f.read())
 	
 	def serve_search(self, req, lang, keywords=None):
 		if not lang in self.languages:
-			return HttpResponseRedirect('/')
+			return self._redirect(req, '/')
 
 		keywords = self.__filter_article(keywords)
 		keywords = keywords.replace('_', ' ')
 
 		if keywords == None or keywords.strip() == "":
-			template = get_template('search_form.html')
-			html = template.render(Context({
-				'languages': data.values()
-			}))
-			return HttpResponse(html)
+			# FIXME: search_form.tpl is not available
+			template = self.template.get_template('search_form.tpl')
+			html = template.render(
+				languages=data.values()
+			)
+			return self._response(req, html)
 		
 		reader = self.__load_reader(lang)
 			
@@ -205,38 +253,69 @@ class Handler:
 
 			data.append([data_id, title, percent, rank])
 		
-		template = get_template('search_result.html')
-		html = template.render(Context({
-			'keywords': keywords,
-			'lang': lang,
-			'result': data
-		}))
-		return HttpResponse(html)
+		template = self.template.get_template('search_result.tpl')
+		html = template.render(
+			keywords=keywords,
+			lang=lang,
+			result=data
+		)
+		return self._response(req, html)
 			
 
-def init():
-	global handler
-	if handler == None:
-		handler = Handler()
+from BaseHTTPServer import BaseHTTPRequestHandler
 
-def article(req, lang, article):
-	init()
-	global handler
-	return handler.serve_article(req, lang, article)
+class DaluangHandler(BaseHTTPRequestHandler):
 
-def search(req, lang, keywords=None):
-	init()
-	global handler
-	return handler.serve_search(req, lang, keywords)
+	handler = Handler()
+	initialized = False
 
-def misc(req, lang, item):
-	init()
-	global handler
-	return handler.serve_misc(req, lang, item)
+	def __init(self):
 
-def index(req):
-	init()
-	global handler
-	return handler.serve_index(req)
+		urlpatterns = (
+			(r'^/\+res/(?P<path>.*)$', self.handler.serve_static),
+			(r'^/([^/]+)/article/(.+)?$', self.handler.serve_article),
+			(r'^/([^/]+)/search$', self.handler.serve_search),
+			(r'^/([^/]+)/search/(.+)$', self.handler.serve_search),
+			(r'^/([^/]+)/(.+)?$', self.handler.serve_misc),
+			(r'^/?$', self.handler.serve_index),
+		)
+
+		self.urls = []
+		for p in urlpatterns:
+			pattern = p[0]
+			h = p[1]
+			c = re.compile(pattern)
+
+			self.urls.append((c, h))
+
+
+	def do_GET(self):
+		
+		if not self.initialized:
+			self.__init()
+
+		path = urllib.unquote(self.path)
+
+		for url in self.urls:
+			r = url[0]
+			f = url[1]
+			match = r.match(path)
+			if match:
+				param = match.groups()
+				f(self, *param)
+				return True
+
+
+		self.send_response(404)
+
+		self.send_header('Content-type', 'text/html')
+		self.end_headers()
+
+		self.wfile.write("<strong>File not found</strong>")
+
+
+		
+	
+
 
 
