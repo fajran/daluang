@@ -102,7 +102,7 @@ class Handler:
 		#print req.LANGUAGE_CODE
 
 		if not lang in self.languages:
-			return self.serve_unavailable(req, lang, article)
+			return self._redirect(req, '/')
 
 		article = self.__filter_article(article)
 		if article == None:
@@ -345,10 +345,4 @@ class DaluangHandler(BaseHTTPRequestHandler):
 		self.end_headers()
 
 		self.wfile.write("<strong>File not found</strong>")
-
-
-		
-	
-
-
 
