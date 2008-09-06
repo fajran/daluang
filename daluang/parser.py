@@ -4,6 +4,7 @@ import re
 import os
 
 from config import Config
+from daluang.common import load_languages
 
 class Parser:
 
@@ -156,11 +157,7 @@ class Parser:
 
 		base = self.config.read('base', '/usr/share/daluang')
 		file = os.path.join(base, 'languages.txt')
-		f = open(file)
-		self.languages = {}
-		for line in f:
-			(code, language) = line.strip().split("\t")
-			self.languages[code] = language
+		self.languages = load_languages(file)
 
 		# Reader
 		

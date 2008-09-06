@@ -6,6 +6,7 @@ from daluang.search import Finder
 import re
 
 from mako.lookup import TemplateLookup
+from daluang.common import load_languages
 
 import urllib
 
@@ -45,11 +46,7 @@ class Handler:
 
 		# Language index
 		file = os.path.join(base_dir, 'languages.txt')
-		f = open(file)
-		self.language = {}
-		for line in f:
-			(code, lang) = line.strip().split("\t")
-			self.language[code] = lang
+		self.languages = load_languages(file)
 
 		# Template
 		global template_dir
@@ -105,11 +102,11 @@ class Handler:
 		#print req.LANGUAGE_CODE
 
 		if not lang in self.languages:
-			return self._redirect(req, '/')
+			return self.serve_unavailable(req, lang, article)
 
 		article = self.__filter_article(article)
 		if article == None:
-			return self._redirect(req, self.__get_main_page(lang))
+			return self.__redirect(req, self.__get_main_page(lang))
 
 		reader = self.__load_reader(lang)
 	
@@ -131,9 +128,13 @@ class Handler:
 			lang=lang
 		)
 	
-		return self._response(req, html)
+		return self.__response(req, html)
 
 	def serve_unavailable(self, req, lang, article):
+
+		if self.language.get(lang, None) == None:
+			return self.__redirect(req, '/')
+
 		article = self.__filter_article(article)
 		article = article.replace('_', ' ')
 
@@ -144,7 +145,7 @@ class Handler:
 			language=self.language[lang]
 		)
 
-		self._response(req, html)
+		self.__response(req, html)
 
 	def serve_not_found(self, req, lang, article):
 
@@ -157,16 +158,16 @@ class Handler:
 			lang=lang
 		)
 	
-		return self._response(req, html, code=404)
+		return self.__response(req, html, code=404)
 
-	def _redirect(self, req, target):
+	def __redirect(self, req, target):
 		req.send_response(307)
 		req.send_header('location', target)
 		req.end_headers()
 
 		return True
 
-	def _response(self, req, data, mime="text/html", code=200):
+	def __response(self, req, data, mime="text/html", code=200):
 		req.send_response(code)
 		req.send_header('content-type', mime)
 		req.end_headers()
@@ -176,13 +177,13 @@ class Handler:
 	
 	def serve_misc(self, req, lang, item):
 		if not lang in self.languages:
-			return self._redirect(req, '/')
+			return self.__redirect(req, '/')
 	
 		html = ""
 		if item == None:
-			return self._redirect(req, self.__get_main_page(lang))
+			return self.__redirect(req, self.__get_main_page(lang))
 			
-		return self._response(req, html, 'text/html')
+		return self.__response(req, html, 'text/html')
 	
 	def serve_index(self, req):
 	
@@ -190,9 +191,9 @@ class Handler:
 		html = template.render(
 			languages=self.data.values()
 		)
-		self._response(req, html)
+		self.__response(req, html)
 
-	def _load_mime(self):
+	def __load_mime(self):
 		
 		if not os.path.exists('/etc/mime.types'):
 			global mime_types
@@ -217,11 +218,11 @@ class Handler:
 
 		self.mime_types[''] = 'text/plain'
 
-	def _get_mime(self, fname):
+	def __get_mime(self, fname):
 		p = fname.split('.')
 		
 		if not self.mime_types:
-			self._load_mime()
+			self.__load_mime()
 
 		if len(p) > 0:
 			ext = p[-1]
@@ -234,11 +235,11 @@ class Handler:
 	def serve_static(self, req, path):
 		global resource_dir, mime_types
 
-		mime = self._get_mime(path)
+		mime = self.__get_mime(path)
 
 		fname = os.path.join(resource_dir, path)
 		if not os.path.exists(fname):
-			return self._response(req, "Not found", code=404)
+			return self.__response(req, "Not found", code=404)
 
 		f = open(fname)
 
@@ -250,13 +251,13 @@ class Handler:
 	
 	def serve_search(self, req, lang, keywords=None):
 		if not lang in self.languages:
-			return self._redirect(req, '/')
+			return self.__redirect(req, '/')
 
 		keywords = self.__filter_article(keywords)
 		keywords = keywords.replace('_', ' ')
 
 		if keywords == None or keywords.strip() == "":
-			return self._redirect(req, self.__get_main_page(lang))
+			return self.__redirect(req, self.__get_main_page(lang))
 		
 		reader = self.__load_reader(lang)
 			
@@ -291,7 +292,7 @@ class Handler:
 			lang=lang,
 			result=data
 		)
-		return self._response(req, html)
+		return self.__response(req, html)
 			
 
 from BaseHTTPServer import BaseHTTPRequestHandler
