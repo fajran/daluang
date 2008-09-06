@@ -165,7 +165,7 @@ class Handler:
 	def serve_article(self, req, lang, article):
 		"""Send an article."""
 		if not lang in self.languages:
-			return self._redirect(req, '/')
+			return self.serve_unavailable(req, lang, article)
 
 		article = self.__filter_article(article)
 		if article == None:

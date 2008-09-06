@@ -1,2 +1,6 @@
 daluang.conf
 data/data
+<<<<<<< HEAD:.gitignore
+=======
+*.pyc
+>>>>>>> 7da61ed3c95128f16bb3bd3ed8c4c11d19324661:.gitignore
