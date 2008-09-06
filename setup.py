@@ -57,7 +57,7 @@ for file in res:
 	files.append('data/server/res/%s' % file)
 data_files.append(('share/daluang/server/res', files))
 
-res = ['index.html', 'article.html', 'search_result.html', 'not_found.html', 'unavailable.html']
+res = ['index.tpl', 'article.tpl', 'search_result.tpl', 'not_found.tpl', 'unavailable.tpl']
 files = []
 for file in res:
 	files.append('data/server/tpl/%s' % file)
@@ -88,8 +88,8 @@ data_files += [
 #
 
 setup(name='daluang',
-	version='0.2',
-	description='Wikipedia Dump Reader',
+	version='0.3',
+	description='Wikipedia Offline Reader',
 	author='Fajran Iman Rusadi',
 	author_email='fajran@gmail.com',
 	url='http://code.google.com/p/daluang/',

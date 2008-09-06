@@ -108,5 +108,30 @@ class Reader:
 		row = self.dbc.fetchone()
 
 		return row != None
+
+	def get_titles(self, start=0, limit=-1):
+		
+		# Total articles
+
+		self.dbc.execute('SELECT COUNT(*) FROM titles')
+		row = self.dbc.fetchone()
+
+		total = int(row[0])
+
+		# Get titles
+		
+		if start < 0:
+			start = 0
+		if limit == -1:
+			limit = total
+
+		sql = 'SELECT title FROM titles ORDER BY title ASC LIMIT %d, %d' % (start, limit)
+		self.dbc.execute(sql)
+		
+		titles = []
+		for row in self.dbc:
+			titles.append(row[0])
+
+		return (titles, total)
 			
 

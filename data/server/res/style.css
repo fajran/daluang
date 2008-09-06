@@ -68,3 +68,12 @@ a:hover {
 	color: #CF3618;
 }
 
+.prevnext {
+	list-style: none;
+	padding-left: 0;
+}
+.prevnext li {
+	display: inline;
+}
+
+

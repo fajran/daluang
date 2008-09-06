@@ -1,14 +1,19 @@
 #!/usr/bin/python
 
 import os
-from daluang import Config, Reader, Parser, Locator, Cache
-from daluang.search import Finder
 import re
+import urllib
+import urlparse
+
+from BaseHTTPServer import BaseHTTPRequestHandler
 
 from mako.lookup import TemplateLookup
+
+from daluang import Config, Reader, Parser, Locator, Cache
+from daluang.search import Finder
 from daluang.common import load_languages
 
-import urllib
+__all__ = ['DaluangHandler']
 
 config = Config()
 config.init()
@@ -52,7 +57,66 @@ class Handler:
 		global template_dir
 		self.template = TemplateLookup(directories=[template_dir])
 
+	def __redirect(self, req, target):
+		"""Redirect to another page."""
+		req.send_response(307)
+		req.send_header('location', target)
+		req.end_headers()
+
+		return True
+
+	def __response(self, req, data, mime="text/html", code=200):
+		"""Send HTTP response."""
+		req.send_response(code)
+		req.send_header('content-type', mime)
+		req.end_headers()
+		req.wfile.write(data)
+
+		return True
+
+	def __load_mime(self):
+		"""Load mime types."""
+		if not os.path.exists('/etc/mime.types'):
+			global mime_types
+			self.mime_types = mime_types
+
+		else:
+			self.mime_types = {}
+
+			re_split = re.compile(u'\s+')
+
+			f = open('/etc/mime.types')
+			for line in f:
+				line = line.strip()
+				if len(line) > 0 and line[0] == '#':
+					continue
+
+				p = re_split.split(line)
+				mime = p[0]
+				
+				for ext in p[1:]:
+					self.mime_types[ext] = mime
+
+		self.mime_types[''] = 'text/plain'
+
+	def __get_mime(self, fname):
+		"""Get mime type of a file identified by its extension."""
+		p = fname.split('.')
+		
+		if not self.mime_types:
+			self.__load_mime()
+
+		if len(p) > 0:
+			ext = p[-1]
+			mime = self.mime_types.get(ext, self.mime_types[''])
+		else:
+			mime = self.mime_types['']
+
+		return mime
+
+	
 	def __get_main_page(self, lang):
+		"""Get main page of a Wikipedia data."""
 		reader = self.__load_reader(lang)
 		base = reader.read_info('base')
 		
@@ -65,7 +129,7 @@ class Handler:
 		return '/%s/article/%s' % (lang, main_page)
 
 	def __load_data(self):
-	
+		"""Load data informations."""
 		locator = Locator()
 		list = locator.scan(data_dir)
 	
@@ -76,6 +140,7 @@ class Handler:
 			self.languages.append(item['code'])
 
 	def __filter_article(self, article):
+		"""Get real article path."""
 		if article != None:
 			while article[-1] == '/':
 				article = article[:-1]
@@ -86,7 +151,7 @@ class Handler:
 		return None
 
 	def __load_reader(self, lang):
-	
+		"""Load reader object of data from a language."""
 		res = self.reader.get(lang, None)
 		if res == None:
 			self.reader[lang] = Reader(self.data[lang]['datafile'])
@@ -98,9 +163,7 @@ class Handler:
 		return res
 
 	def serve_article(self, req, lang, article):
-		#print _
-		#print req.LANGUAGE_CODE
-
+		"""Send an article."""
 		if not lang in self.languages:
 			return self._redirect(req, '/')
 
@@ -131,7 +194,7 @@ class Handler:
 		return self.__response(req, html)
 
 	def serve_unavailable(self, req, lang, article):
-
+		"""Show article unavailability message."""
 		if self.language.get(lang, None) == None:
 			return self.__redirect(req, '/')
 
@@ -148,7 +211,7 @@ class Handler:
 		self.__response(req, html)
 
 	def serve_not_found(self, req, lang, article):
-
+		"""Show article is not found message."""
 		article = self.__filter_article(article)
 		article = article.replace('_', ' ')
 
@@ -160,22 +223,8 @@ class Handler:
 	
 		return self.__response(req, html, code=404)
 
-	def __redirect(self, req, target):
-		req.send_response(307)
-		req.send_header('location', target)
-		req.end_headers()
-
-		return True
-
-	def __response(self, req, data, mime="text/html", code=200):
-		req.send_response(code)
-		req.send_header('content-type', mime)
-		req.end_headers()
-		req.wfile.write(data)
-
-		return True
-	
 	def serve_misc(self, req, lang, item):
+		"""Serve other things."""
 		if not lang in self.languages:
 			return self.__redirect(req, '/')
 	
@@ -186,53 +235,15 @@ class Handler:
 		return self.__response(req, html, 'text/html')
 	
 	def serve_index(self, req):
-	
+		"""Show index page."""
 		template = self.template.get_template("index.tpl")
 		html = template.render(
 			languages=self.data.values()
 		)
 		self.__response(req, html)
 
-	def __load_mime(self):
-		
-		if not os.path.exists('/etc/mime.types'):
-			global mime_types
-			self.mime_types = mime_types
-
-		else:
-			self.mime_types = {}
-
-			re_split = re.compile(u'\s+')
-
-			f = open('/etc/mime.types')
-			for line in f:
-				line = line.strip()
-				if len(line) > 0 and line[0] == '#':
-					continue
-
-				p = re_split.split(line)
-				mime = p[0]
-				
-				for ext in p[1:]:
-					self.mime_types[ext] = mime
-
-		self.mime_types[''] = 'text/plain'
-
-	def __get_mime(self, fname):
-		p = fname.split('.')
-		
-		if not self.mime_types:
-			self.__load_mime()
-
-		if len(p) > 0:
-			ext = p[-1]
-			mime = self.mime_types.get(ext, self.mime_types[''])
-		else:
-			mime = self.mime_types['']
-
-		return mime
-
 	def serve_static(self, req, path):
+		"""Return static content."""
 		global resource_dir, mime_types
 
 		mime = self.__get_mime(path)
@@ -250,6 +261,7 @@ class Handler:
 		req.wfile.write(f.read())
 	
 	def serve_search(self, req, lang, keywords=None):
+		"""Search an article."""
 		if not lang in self.languages:
 			return self.__redirect(req, '/')
 
@@ -293,9 +305,64 @@ class Handler:
 			result=data
 		)
 		return self.__response(req, html)
-			
 
-from BaseHTTPServer import BaseHTTPRequestHandler
+	def serve_special(self, req, lang, type):
+		"""Show special pages."""
+		if type == 'all':
+			return self.__serve_special_all(req, lang)
+		else:
+			return self.__redirect(lang, '/')
+
+	def __serve_special_all(self, req, lang):
+		"""Show list of all available pages."""
+		if not lang in self.languages:
+			return self.__redirect(req, self.__get_main_page(lang))
+
+		reader = self.__load_reader(lang)
+	
+		# Start index
+
+		start = 0
+
+		(scheme, addr, path, params, qs, fragment) = urlparse.urlparse(req.path)
+		p = qs.split('&')
+		for q in p:
+			if len(q) == 0:
+				continue
+
+			(key, val) = q.split('=')
+			key = urllib.unquote(key)
+			val = urllib.unquote(val)
+
+			if key == 'start':
+				start = int(val)
+
+		# Get titles
+
+		limit = 100
+		(titles, total) = reader.get_titles(start=start, limit=limit)
+
+		prev_index = -1
+		if start > 0:
+			prev_index = start - limit
+			if prev_index < 0:
+				prev_index = 0
+
+		next_index = -1
+		if start + limit < total:
+			next_index = start + limit
+
+		template = self.template.get_template('all_pages.tpl')
+		html = template.render(
+			titles=titles,
+			lang=self.languages[lang],
+			code=lang,
+			prev_index=prev_index,
+			next_index=next_index
+		)
+
+		return self.__response(req, html)
+			
 
 class DaluangHandler(BaseHTTPRequestHandler):
 
@@ -307,8 +374,8 @@ class DaluangHandler(BaseHTTPRequestHandler):
 		urlpatterns = (
 			(r'^/\+res/(?P<path>.*)$', self.handler.serve_static),
 			(r'^/([^/]+)/article/(.+)?$', self.handler.serve_article),
-			(r'^/([^/]+)/search$', self.handler.serve_search),
 			(r'^/([^/]+)/search/(.+)$', self.handler.serve_search),
+			(r'^/([^/]+)/special/(.+)$', self.handler.serve_special),
 			(r'^/([^/]+)/(.+)?$', self.handler.serve_misc),
 			(r'^/?$', self.handler.serve_index),
 		)
@@ -327,7 +394,8 @@ class DaluangHandler(BaseHTTPRequestHandler):
 		if not self.initialized:
 			self.__init()
 
-		path = urllib.unquote(self.path)
+		(scheme, addr, path, params, qs, fragment) = urlparse.urlparse(self.path)
+		path = urllib.unquote(path)
 
 		for url in self.urls:
 			r = url[0]
