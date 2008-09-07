@@ -5,7 +5,7 @@
 </head><body>
 <h1>All Pages - ${ lang }</h1>
 
-% if prev_index >= 0 and next_index >= 0:
+% if prev_index >= 0 or next_index >= 0:
 <ul class="prevnext">
 % if prev_index >= 0:
 	<li><a href="/${ code }/special/all?start=${ prev_index }">&laquo; Prev</a></li>
@@ -22,7 +22,7 @@
 % endfor
 </ul>
 
-% if prev_index >= 0 and next_index >= 0:
+% if prev_index >= 0 or next_index >= 0:
 <ul class="prevnext">
 % if prev_index >= 0:
 	<li><a href="/${ code }/special/all?start=${ prev_index }">&laquo; Prev</a></li>
