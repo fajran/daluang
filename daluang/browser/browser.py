@@ -36,9 +36,13 @@ class Browser:
 		self.btn_forward = glade.get_widget("btn_forward")
 		self.btn_ok = glade.get_widget("btn_ok")
 		self.btn_search = glade.get_widget("btn_search")
-		self.btn_online = glade.get_widget("btn_online")
 		self.btn_home = glade.get_widget("btn_home")
 		self.txt_article = glade.get_widget("txt_article")
+		self.btn_extra = glade.get_widget("btn_extra")
+		self.menu_extra = glade.get_widget("menu_extra")
+
+		self.mi_online = glade.get_widget("mi_online")
+		self.mi_all_pages = glade.get_widget("mi_all_pages")
 
 		self.browser = gtkmozembed.MozEmbed()
 
@@ -52,15 +56,17 @@ class Browser:
 		self.btn_back.connect("clicked", self.__on_back_clicked)
 		self.btn_forward.connect("clicked", self.__on_forward_clicked)
 		self.btn_ok.connect("clicked", self.__on_ok_clicked)
-		self.btn_online.connect("clicked", self.__on_online_clicked)
 		self.btn_search.connect("clicked", self.__on_search_clicked)
 		self.btn_home.connect("clicked", self.__on_home_clicked)
+		self.btn_extra.connect("clicked", self.__on_extra_clicked)
 		self.txt_article.connect("activate", self.__on_article_changed)
 		self.browser.connect("location", self.__on_browser_changed)
 		self.browser.connect("open-uri", self.__on_browser_uri_opened)
 		self.browser.connect("title", self.__on_browser_title_changed)
 		self.browser.connect("net-stop", self.__on_browser_complete)
-	
+
+		self.mi_online.connect("activate", self.__on_online_activated)
+		self.mi_all_pages.connect("activate", self.__on_all_pages_activated)
 
 	def __init_gui_dialog(self):
 		file = os.path.join(self.config.read('base', '/usr/share/daluang'), "browser/res/external.glade")
@@ -86,7 +92,7 @@ class Browser:
 		text = self.txt_article.get_text()
 		self.open(text)
 
-	def __on_online_clicked(self, src):
+	def __on_online_activated(self, src):
 		curr = self.browser.get_location()
 
 		skip = len(self.base_addr)
@@ -107,12 +113,18 @@ class Browser:
 			if url:
 				self.__open_external_browser(url)
 
+	def __on_all_pages_activated(self, src):
+		self.open(None, type="all_pages")
+
 	def __on_search_clicked(self, src):
 		text = self.txt_article.get_text()
 		self.open(text, "search")
 
 	def __on_home_clicked(self, src):
 		self.browser.load_url(self.base_addr)
+
+	def __on_extra_clicked(self, src):
+		self.menu_extra.popup(None, None, None, 1, 0)
 
 	def __on_article_changed(self, src):
 		text = src.get_text()
@@ -152,7 +164,12 @@ class Browser:
 
 		self.btn_ok.set_sensitive(status)
 		self.btn_search.set_sensitive(status)
-		self.btn_online.set_sensitive(status)
+		self.mi_online.set_sensitive(status)
+
+		if path == '':
+			self.mi_all_pages.set_sensitive(False)
+		else:
+			self.mi_all_pages.set_sensitive(True)
 
 
 	def __on_browser_title_changed(self, src, data=None):
@@ -194,20 +211,29 @@ class Browser:
 		gtk.main()
 
 	def open(self, article, type="article"):
-		article = article.strip()
-		if len(article) == 0:
-			return
-
-		curr = self.browser.get_location()
 
 		skip = len(self.base_addr)
+		curr = self.browser.get_location()
 		path = curr[skip:].strip('/ ')
 		match = self.re_search.match(path)
 
+		lang = None
 		if match:
 			lang = match.group(1)
-			url = "%s/%s/%s/%s" % (self.base_addr, lang, type, article)
+
+		if type in ["all_pages"]:
+			url = "%s/%s/special/all" % (self.base_addr, lang)
 			self.open_url(url)
+
+		elif type in ["article", "search"]:
+			article = article.strip()
+			if len(article) == 0:
+				return
+	
+			if match:
+				lang = match.group(1)
+				url = "%s/%s/%s/%s" % (self.base_addr, lang, type, article)
+				self.open_url(url)
 
 	def open_url(self, url):
 		self.browser.load_url(url)
