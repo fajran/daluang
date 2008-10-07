@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 from distutils.core import setup
+from os import listdir, path
+from glob import glob
 
 #
 # Data files
@@ -10,58 +12,41 @@ data_files = []
 
 # Binaries
 
-bins = ['daluang', 'daluang-server', 'daluang-browser', 'daluang-browser-bin']
-files = []
-for bin in bins:
-	files.append('bin/%s' % bin)
-data_files.append(('bin', files))
+data_files.append(('bin', glob('bin/*')))
 
 # Locale files
 
 domain = 'daluang'
 languages = ['id']
-for lang in languages:
+for lang in listdir('data/locale'):
+	if not path.isdir(path.join('data/locale', lang)):
+		continue
+	if lang[0] == '.':
+		continue
+
 	data_files.append((
 		'share/daluang/locale/%s/LC_MESSAGES' % lang, 
 		[
 			'data/locale/%s/LC_MESSAGES/%s.mo' % (lang, domain),
-			'data/locale/%s/LC_MESSAGES/django.mo' % (lang)
 		]
 	))
 
 # Icons
 
-sizes = [16, 22, 24, 32, 48, 64]
-for size in sizes:
+for type in listdir('data/browser/icons'):
 	data_files.append((
-		'share/icons/hicolor/%dx%d/apps' % (size, size),
-		['data/browser/icons/%dx%d/apps/daluang.png' % (size, size)]
+		'share/icons/hicolor/%s/apps' % (type),
+		glob('data/browser/icons/%s/apps/*' % (type))
 	))
-data_files.append(
-	('share/icons/hicolor/scalable/apps', ['data/browser/icons/scalable/apps/daluang.svg'])
-)
 
 # Browser resources
 
-res = ['browser.glade', 'external.glade', 'icon.svg', 'online.svg']
-files = []
-for file in res:
-	files.append('data/browser/res/%s' % file)
-data_files.append(('share/daluang/browser/res', files))
+data_files.append(('share/daluang/browser/res', glob('data/browser/res/*')))
 
 # Server resources
 
-res = ['style.css', 'index.css', 'ext.png', 'jquery.js', 'article.js']
-files = []
-for file in res:
-	files.append('data/server/res/%s' % file)
-data_files.append(('share/daluang/server/res', files))
-
-res = ['index.tpl', 'article.tpl', 'search_result.tpl', 'not_found.tpl', 'unavailable.tpl']
-files = []
-for file in res:
-	files.append('data/server/tpl/%s' % file)
-data_files.append(('share/daluang/server/tpl', files))
+data_files.append(('share/daluang/server/res', glob('data/server/res/*')))
+data_files.append(('share/daluang/server/tpl', glob('data/server/tpl/*.tpl')))
 
 # Other files
 
@@ -77,10 +62,7 @@ data_files += [
 	]),
 	('share/daluang/data', []),
 	('share/daluang/index', []),
-	('share/daluang/tools', [
-		'tools/compile-messages.py',
-		'tools/make-messages.py',
-	]),
+	('share/daluang/tools', glob('tools/*')),
 ]
 
 #

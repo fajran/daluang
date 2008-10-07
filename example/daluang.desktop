@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Daluang - Wikipedia Offline Browser
 Comment=Read Wikipedia content offline
-Exec=daluang-browser
+Exec=daluang
 Icon=daluang
 StartupNotify=false
 Terminal=false
