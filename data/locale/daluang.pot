@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2008-10-07 11:52+0200\n"
+"POT-Creation-Date: 2008-10-07 12:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,9 @@ msgstr ""
 msgid "Starting Daluang server at %(addr)s:%(port)s"
 msgstr ""
 
-#: bin/daluang-utils:47
+#: bin/daluang-util:47
 msgid ""
-"Usage: daluang-utils <command> [cmd-opt ...]\n"
+"Usage: daluang-util <command> [cmd-opt ...]\n"
 "\n"
 "Available commands:\n"
 "\n"
@@ -35,24 +35,24 @@ msgid ""
 "- help    : help for other commands"
 msgstr ""
 
-#: bin/daluang-utils:71
+#: bin/daluang-util:71
 #, python-format
 msgid "Available commands: %s"
 msgstr ""
 
-#: bin/daluang-utils:74
+#: bin/daluang-util:74
 msgid ""
 "Need help?\n"
 "\t\n"
-"Usage: daluang-utils help <command>"
+"Usage: daluang-util help <command>"
 msgstr ""
 
-#: bin/daluang-utils:106
+#: bin/daluang-util:106
 msgid ""
 "This command is used to convert a data from Wikipedia's format to Daluang "
 "own format.\n"
 "\t\n"
-"Usage: daluang-utils convert <language> <code> <data>\n"
+"Usage: daluang-util convert <language> <code> <data>\n"
 "\n"
 "    <data> is an XML database dump of Wikipedia. Usually it is written in "
 "the following format:\n"
@@ -61,38 +61,38 @@ msgid ""
 "\t\n"
 "Example usage:\n"
 "\n"
-"    $ daluang-utils convert \"Bahasa Indonesia\" \"id\" idwiki-20080213-"
-"pages-articles.xml.bz2"
+"    $ daluang-util convert \"Bahasa Indonesia\" \"id\" idwiki-20080213-pages-"
+"articles.xml.bz2"
 msgstr ""
 
-#: bin/daluang-utils:138
+#: bin/daluang-util:138
 #, python-format
 msgid "Not found: %s"
 msgstr ""
 
-#: bin/daluang-utils:144
+#: bin/daluang-util:144
 msgid ""
 "This command is used to read an article from Daluang data.\n"
 "\t\n"
-"Usage: daluang-utils read <datafile|code> <title>\n"
+"Usage: daluang-util read <datafile|code> <title>\n"
 "\n"
 "    <datafile|code> is either a data file or a language code.\n"
 "\n"
 "Example usage:\n"
 "\n"
-"    $ daluang-utils read id.data \"bandung\"\n"
-"    $ daluang-utils read id \"bandung\""
+"    $ daluang-util read id.data \"bandung\"\n"
+"    $ daluang-util read id \"bandung\""
 msgstr ""
 
-#: bin/daluang-utils:165 data/server/tpl/index.tpl:18
+#: bin/daluang-util:165 data/server/tpl/index.tpl:18
 msgid "No data available"
 msgstr ""
 
-#: bin/daluang-utils:168
+#: bin/daluang-util:168
 msgid "Available data:"
 msgstr ""
 
-#: bin/daluang-utils:177
+#: bin/daluang-util:177
 msgid ""
 "This command is used to list installed data.\n"
 "\n"
@@ -107,15 +107,15 @@ msgid ""
 "The value of \"code\" is used when you use \"read\" command."
 msgstr ""
 
-#: bin/daluang-utils:198
+#: bin/daluang-util:198
 msgid "python-xapian doesn't exist"
 msgstr ""
 
-#: bin/daluang-utils:213
+#: bin/daluang-util:213
 msgid ""
 "This command is used to create a Xapian index of a data.\n"
 "\t\n"
-"Usage: daluang-utils index <data> <database>\n"
+"Usage: daluang-util index <data> <database>\n"
 "\n"
 "    <data> is a Daluang's data and <database> is a target Xapian's "
 "database.\n"
@@ -125,7 +125,7 @@ msgid ""
 "\t\n"
 "Example usage:\n"
 "\n"
-"    $ daluang-utils index id.data id"
+"    $ daluang-util index id.data id"
 msgstr ""
 
 #: daluang/parser.py:916

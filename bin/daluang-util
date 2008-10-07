@@ -44,7 +44,7 @@ def load_data():
 #
 
 def usage():
-	print _("""Usage: daluang-utils <command> [cmd-opt ...]
+	print _("""Usage: daluang-util <command> [cmd-opt ...]
 
 Available commands:
 
@@ -73,7 +73,7 @@ def cmd_help():
 def usage_help():
 	print _('''Need help?
 	
-Usage: daluang-utils help <command>''')
+Usage: daluang-util help <command>''')
 
 #
 # Index
@@ -105,7 +105,7 @@ def cmd_convert():
 def usage_convert():
 	print _("""This command is used to convert a data from Wikipedia's format to Daluang own format.
 	
-Usage: daluang-utils convert <language> <code> <data>
+Usage: daluang-util convert <language> <code> <data>
 
     <data> is an XML database dump of Wikipedia. Usually it is written in the following format:
 
@@ -113,7 +113,7 @@ Usage: daluang-utils convert <language> <code> <data>
 	
 Example usage:
 
-    $ daluang-utils convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2""")
+    $ daluang-util convert "Bahasa Indonesia" "id" idwiki-20080213-pages-articles.xml.bz2""")
 
 #
 # Read
@@ -143,14 +143,14 @@ def cmd_read():
 def usage_read():
 	print _('''This command is used to read an article from Daluang data.
 	
-Usage: daluang-utils read <datafile|code> <title>
+Usage: daluang-util read <datafile|code> <title>
 
     <datafile|code> is either a data file or a language code.
 
 Example usage:
 
-    $ daluang-utils read id.data "bandung"
-    $ daluang-utils read id "bandung"''')
+    $ daluang-util read id.data "bandung"
+    $ daluang-util read id "bandung"''')
 
 	pass
 
@@ -212,7 +212,7 @@ def cmd_index():
 def usage_index():
 	print _("""This command is used to create a Xapian index of a data.
 	
-Usage: daluang-utils index <data> <database>
+Usage: daluang-util index <data> <database>
 
     <data> is a Daluang's data and <database> is a target Xapian's database.
 
@@ -220,7 +220,7 @@ You have to install python-xapian package in order to use this function. This op
 	
 Example usage:
 
-    $ daluang-utils index id.data id""")
+    $ daluang-util index id.data id""")
 
 #
 # Main
