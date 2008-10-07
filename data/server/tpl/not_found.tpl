@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/+res/style.css"/>
 </head><body>
-<h1${_('>Not found')}</h1>
+<h1>${_("Not found")}</h1>
 
 <p>${_("Daluang doesn't have an article called <strong>%s</strong>") % article }</strong>.</p>
 

@@ -6,7 +6,7 @@
 </head><body><div id="c">
 
 % if languages:
-<h1>${_('Available Languages')}</h1>
+<h1>${_("Available Languages")}</h1>
 
 <ul id="lang">
 % for item in languages:
@@ -15,9 +15,9 @@
 </ul>
 
 % else:
-<h1>${_('No data available')}</h1>
+<h1>${_("No data available")}</h1>
 
-<p>${_('Please install some data.')}</p>
+<p>${_("Please install some data.")}</p>
 % endif
 
 </div></body></html>

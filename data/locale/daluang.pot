@@ -1,0 +1,299 @@
+# Translations template for PROJECT.
+# Copyright (C) 2008 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2008-10-07 11:25+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+#: bin/daluang:47
+msgid ""
+"Usage: daluang <command> [cmd-opt ...]\n"
+"\n"
+"Available commands:\n"
+"\n"
+"- convert : convertes a wikipedia dump file\n"
+"- index   : creates Xapian's index for a daluang data\n"
+"- list    : lists all installed wikipedia files\n"
+"- read    : reads a wikipedia entry\n"
+"- help    : help for other commands"
+msgstr ""
+
+#: bin/daluang:71
+#, python-format
+msgid "Available commands: %s"
+msgstr ""
+
+#: bin/daluang:74
+msgid ""
+"Need help?\n"
+"\t\n"
+"Usage: daluang help <command>"
+msgstr ""
+
+#: bin/daluang:106
+msgid ""
+"This command is used to convert a data from Wikipedia's format to Daluang "
+"own format.\n"
+"\t\n"
+"Usage: daluang convert <language> <code> <data>\n"
+"\n"
+"    <data> is an XML database dump of Wikipedia. Usually it is written in "
+"the following format:\n"
+"\n"
+"        idwiki-20080213-pages-articles.xml.bz2\n"
+"\t\n"
+"Example usage:\n"
+"\n"
+"    $ daluang convert \"Bahasa Indonesia\" \"id\" idwiki-20080213-pages-"
+"articles.xml.bz2"
+msgstr ""
+
+#: bin/daluang:138
+#, python-format
+msgid "Not found: %s"
+msgstr ""
+
+#: bin/daluang:144
+msgid ""
+"This command is used to read an article from Daluang data.\n"
+"\t\n"
+"Usage: daluang read <datafile|code> <title>\n"
+"\n"
+"    <datafile|code> is either a data file or a language code.\n"
+"\n"
+"Example usage:\n"
+"\n"
+"    $ daluang read id.data \"bandung\"\n"
+"    $ daluang read id \"bandung\""
+msgstr ""
+
+#: bin/daluang:165 data/server/tpl/index.tpl:18
+msgid "No data available"
+msgstr ""
+
+#: bin/daluang:168
+msgid "Available data:"
+msgstr ""
+
+#: bin/daluang:177
+msgid ""
+"This command is used to list installed data.\n"
+"\n"
+"Each line will be written in the following format:\n"
+"\n"
+"    [code] langauge\n"
+"\n"
+"Example:\n"
+"\n"
+"    [id] Bahasa Indonesia\n"
+"\n"
+"The value of \"code\" is used when you use \"read\" command."
+msgstr ""
+
+#: bin/daluang:198
+msgid "python-xapian doesn't exist"
+msgstr ""
+
+#: bin/daluang:213
+msgid ""
+"This command is used to create a Xapian index of a data.\n"
+"\t\n"
+"Usage: daluang index <data> <database>\n"
+"\n"
+"    <data> is a Daluang's data and <database> is a target Xapian's "
+"database.\n"
+"\n"
+"You have to install python-xapian package in order to use this function. "
+"This operation may take very long time!\n"
+"\t\n"
+"Example usage:\n"
+"\n"
+"    $ daluang index id.data id"
+msgstr ""
+
+#: bin/daluang-server:19
+#, python-format
+msgid "Starting Daluang server at %(addr)s:%(port)s"
+msgstr ""
+
+#: daluang/parser.py:916
+msgid "Category:"
+msgstr ""
+
+#: daluang/parser.py:932
+msgid "Other languages:"
+msgstr ""
+
+#: daluang/parser.py:933
+msgid "show"
+msgstr ""
+
+#: daluang/parser.py:934
+msgid "hide"
+msgstr ""
+
+#: data/browser/res/browser.glade:22
+msgid "Language list page"
+msgstr ""
+
+#: data/browser/res/browser.glade:50
+msgid "Back"
+msgstr ""
+
+#: data/browser/res/browser.glade:70
+msgid "Forward"
+msgstr ""
+
+#: data/browser/res/browser.glade:90
+msgid "Article title"
+msgstr ""
+
+#: data/browser/res/browser.glade:101
+msgid "Open article"
+msgstr ""
+
+#: data/browser/res/browser.glade:121
+msgid "Search"
+msgstr ""
+
+#: data/browser/res/browser.glade:150
+msgid "Extra"
+msgstr ""
+
+#: data/browser/res/browser.glade:191
+msgid "Open online version of this article"
+msgstr ""
+
+#: data/browser/res/browser.glade:192
+msgid "Open Wikipedia"
+msgstr ""
+
+#: data/browser/res/browser.glade:204
+msgid "List all available pages"
+msgstr ""
+
+#: data/browser/res/browser.glade:205
+msgid "Show all pages"
+msgstr ""
+
+#: data/browser/res/external.glade:9
+msgid "Open external browser?"
+msgstr ""
+
+#: data/browser/res/external.glade:27
+msgid ""
+"You clicked an external link and Daluang is going to open it on external "
+"browser."
+msgstr ""
+
+#: data/browser/res/external.glade:35
+msgid "http://example.com/article/"
+msgstr ""
+
+#: data/browser/res/external.glade:49
+msgid "Do you want to continue?"
+msgstr ""
+
+#: data/browser/res/external.glade:73
+msgid "Yes"
+msgstr ""
+
+#: data/browser/res/external.glade:83
+msgid "No"
+msgstr ""
+
+#: data/browser/res/external.glade:96
+msgid "Always"
+msgstr ""
+
+#: data/server/tpl/all_pages.tpl:2 data/server/tpl/all_pages.tpl:6
+msgid "All Pages"
+msgstr ""
+
+#: data/server/tpl/all_pages.tpl:41
+msgid "to"
+msgstr ""
+
+#: data/server/tpl/index.tpl:9
+msgid "Available Languages"
+msgstr ""
+
+#: data/server/tpl/index.tpl:20
+msgid "Please install some data."
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:2
+msgid "Content not found!"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:6
+msgid "Not found"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:8
+#, python-format
+msgid "Daluang doesn't have an article called <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:10
+msgid "Suggestions:"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:13
+#, python-format
+msgid "Search content for <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:14
+#, python-format
+msgid "Open online version of <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/not_found.tpl:15
+#, python-format
+msgid "Search wikipedia for <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/search_result.tpl:6
+msgid "Search result"
+msgstr ""
+
+#: data/server/tpl/search_result.tpl:10
+#, python-format
+msgid "Search result for <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/search_result.tpl:20
+#, python-format
+msgid "Daluang could not found anything about <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/unavailable.tpl:2
+msgid "Content not available!"
+msgstr ""
+
+#: data/server/tpl/unavailable.tpl:6
+msgid "Content not available"
+msgstr ""
+
+#: data/server/tpl/unavailable.tpl:8
+#, python-format
+msgid ""
+"Daluang doesn't have data for <strong>%s</strong> in <strong>%s</strong>"
+msgstr ""
+
+#: data/server/tpl/unavailable.tpl:10
+msgid "Click here to open the online version"
+msgstr ""

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the Daluang package.
 # Fajran Iman Rusadi <fajran@gmail.com>, 2008.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-25 21:11+0200\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2008-10-07 11:25+0200\n"
 "PO-Revision-Date: 2008-04-05 15:28+0200\n"
 "Last-Translator: Fajran Iman Rusadi <fajran@gmail.com>\n"
 "Language-Team: Indonesian Translator\n"
@@ -114,7 +113,7 @@ msgstr ""
 "    $ daluang read id.data \"bandung\"\n"
 "    $ daluang read id \"bandung\""
 
-#: bin/daluang:165 data/server/tpl/index.html:19
+#: bin/daluang:165 data/server/tpl/index.tpl:18
 msgid "No data available"
 msgstr "Data tidak tersedia"
 
@@ -188,150 +187,176 @@ msgstr ""
 msgid "Starting Daluang server at %(addr)s:%(port)s"
 msgstr "Menjalankan server Daluang pada %(addr)s:%(port)s"
 
-#: daluang/parser.py:919 build/lib/daluang/parser.py:910
+#: daluang/parser.py:916
 msgid "Category:"
 msgstr "Kategori:"
 
-#: daluang/parser.py:935 build/lib/daluang/parser.py:926
+#: daluang/parser.py:932
 msgid "Other languages:"
 msgstr "Bahasa lain:"
 
-#: daluang/parser.py:936 build/lib/daluang/parser.py:927
+#: daluang/parser.py:933
 msgid "show"
 msgstr "tampilkan"
 
-#: daluang/parser.py:937 build/lib/daluang/parser.py:928
+#: daluang/parser.py:934
 msgid "hide"
 msgstr "sembunyikan"
 
-#: data/browser/res/external.glade:1
-msgid "Always"
-msgstr "Selalu"
+#: data/browser/res/browser.glade:22
+msgid "Language list page"
+msgstr "Halaman daftar bahasa"
 
-#: data/browser/res/external.glade:2
-msgid "Do you want to continue?"
-msgstr "Apakah Anda ingin melanjutkan?"
+#: data/browser/res/browser.glade:50
+msgid "Back"
+msgstr "Mundur"
 
-#: data/browser/res/external.glade:3
-msgid "No"
-msgstr "Tidak"
+#: data/browser/res/browser.glade:70
+msgid "Forward"
+msgstr "Maju"
 
-#: data/browser/res/external.glade:4
+#: data/browser/res/browser.glade:90
+msgid "Article title"
+msgstr "Judul artikel"
+
+#: data/browser/res/browser.glade:101
+msgid "Open article"
+msgstr "Buka artikel"
+
+#: data/browser/res/browser.glade:121
+msgid "Search"
+msgstr "Cari"
+
+#: data/browser/res/browser.glade:150
+msgid "Extra"
+msgstr "Ekstra"
+
+#: data/browser/res/browser.glade:191
+msgid "Open online version of this article"
+msgstr "Buka versi online dari artikel ini"
+
+#: data/browser/res/browser.glade:192
+msgid "Open Wikipedia"
+msgstr "Buka Wikipedia"
+
+#: data/browser/res/browser.glade:204
+msgid "List all available pages"
+msgstr "Tampilkan seluruh halaman yang ada"
+
+#: data/browser/res/browser.glade:205
+msgid "Show all pages"
+msgstr "Semua halaman"
+
+#: data/browser/res/external.glade:9
 msgid "Open external browser?"
 msgstr "Buka peramban eksternal?"
 
-#: data/browser/res/external.glade:5
-msgid "Yes"
-msgstr "Ya"
-
-#: data/browser/res/external.glade:6
+#: data/browser/res/external.glade:27
 msgid ""
 "You clicked an external link and Daluang is going to open it on external "
 "browser."
 msgstr ""
-"Anda mengklik sebuah tautan eksternal dan Daluang akan membuka peramban internet"
-"untuk membukanya."
+"Anda mengklik sebuah tautan eksternal dan Daluang akan membuka peramban "
+"internetuntuk membukanya."
 
-#: data/browser/res/external.glade:7
+#: data/browser/res/external.glade:35
 msgid "http://example.com/article/"
 msgstr "http://example.com/article/"
 
-#: data/browser/res/browser.glade:1
-msgid "Article title"
-msgstr "Judul artikel"
+#: data/browser/res/external.glade:49
+msgid "Do you want to continue?"
+msgstr "Apakah Anda ingin melanjutkan?"
 
-#: data/browser/res/browser.glade:2
-msgid "Back"
-msgstr "Mundur"
+#: data/browser/res/external.glade:73
+msgid "Yes"
+msgstr "Ya"
 
-#: data/browser/res/browser.glade:3
-msgid "Forward"
-msgstr "Maju"
+#: data/browser/res/external.glade:83
+msgid "No"
+msgstr "Tidak"
 
-#: data/browser/res/browser.glade:4
-msgid "Language list page"
-msgstr "Halaman daftar bahasa"
+#: data/browser/res/external.glade:96
+msgid "Always"
+msgstr "Selalu"
 
-#: data/browser/res/browser.glade:5
-msgid "Open article"
-msgstr "Buka artikel"
+#: data/server/tpl/all_pages.tpl:2 data/server/tpl/all_pages.tpl:6
+msgid "All Pages"
+msgstr "Semua Halaman"
 
-#: data/browser/res/browser.glade:6
-msgid "Open online version"
-msgstr "Buka versi online"
+#: data/server/tpl/all_pages.tpl:41
+msgid "to"
+msgstr "sampai"
 
-#: data/browser/res/browser.glade:7
-msgid "Search"
-msgstr "Cari"
-
-#: data/server/tpl/search_result.html:7
-msgid "Search result"
-msgstr "Hasil pencarian"
-
-#: data/server/tpl/search_result.html:11
-#, python-format
-msgid "Search result for <strong>%(keywords)s</strong>:"
-msgstr "Hasil pencarian untuk <strong>%(keywords)s</strong>:"
-
-#: data/server/tpl/search_result.html:21
-#, python-format
-msgid "Daluang could not found anything about <strong>%(keywords)s</strong>."
-msgstr ""
-"Daluang tidak dapat menemukan apapun mengenai <strong>%(keywords)s</strong>."
-
-#: data/server/tpl/index.html:10
+#: data/server/tpl/index.tpl:9
 msgid "Available Languages"
-msgstr "Bahasa Yang Tesedia:"
+msgstr "Bahasa Yang Tesedia"
 
-#: data/server/tpl/index.html:21
+#: data/server/tpl/index.tpl:20
 msgid "Please install some data."
 msgstr "Harap pasang beberapa data."
 
-#: data/server/tpl/not_found.html:7
+#: data/server/tpl/not_found.tpl:2
+msgid "Content not found!"
+msgstr "Data tidak tersedia!"
+
+#: data/server/tpl/not_found.tpl:6
 msgid "Not found"
 msgstr "Tidak ditemukan"
 
-#: data/server/tpl/not_found.html:9
+#: data/server/tpl/not_found.tpl:8
 #, python-format
-msgid "Daluang doesn't have an article called <strong>%(article)s</strong>."
-msgstr "Daluang tidak memiliki artikel berjudul <strong>%(article)s</strong>."
+msgid "Daluang doesn't have an article called <strong>%s</strong>"
+msgstr "Daluang tidak memiliki artikel berjudul <strong>%s</strong>."
 
-#: data/server/tpl/not_found.html:11
+#: data/server/tpl/not_found.tpl:10
 msgid "Suggestions:"
 msgstr "Saran:"
 
-#: data/server/tpl/not_found.html:14
+#: data/server/tpl/not_found.tpl:13
 #, python-format
-msgid "Search content for <strong>%(article)s</strong>"
-msgstr "Cari artikel mengenai <strong>%(article)s</strong>"
+msgid "Search content for <strong>%s</strong>"
+msgstr "Cari artikel mengenai <strong>%s</strong>"
 
-#: data/server/tpl/not_found.html:15
+#: data/server/tpl/not_found.tpl:14
 #, python-format
-msgid "Open online version of <strong>%(article)s</strong>"
-msgstr "Buka versi online dari <strong>%(article)s</strong>"
+msgid "Open online version of <strong>%s</strong>"
+msgstr "Buka versi online dari <strong>%s</strong>"
 
-#: data/server/tpl/not_found.html:16
+#: data/server/tpl/not_found.tpl:15
 #, python-format
-msgid "Search wikipedia for <strong>%(article)s</strong>"
-msgstr "Cari pada wikipedia mengenai <strong>%(article)s</strong>"
+msgid "Search wikipedia for <strong>%s</strong>"
+msgstr "Cari pada wikipedia mengenai <strong>%s</strong>"
 
-#: data/server/tpl/unavailable.html:3
+#: data/server/tpl/search_result.tpl:6
+msgid "Search result"
+msgstr "Hasil pencarian"
+
+#: data/server/tpl/search_result.tpl:10
+#, python-format
+msgid "Search result for <strong>%s</strong>"
+msgstr "Hasil pencarian untuk <strong>%s</strong>:"
+
+#: data/server/tpl/search_result.tpl:20
+#, python-format
+msgid "Daluang could not found anything about <strong>%s</strong>"
+msgstr "Daluang tidak dapat menemukan apapun mengenai <strong>%s</strong>."
+
+#: data/server/tpl/unavailable.tpl:2
 msgid "Content not available!"
 msgstr "Data tidak tersedia!"
 
-#: data/server/tpl/unavailable.html:7
+#: data/server/tpl/unavailable.tpl:6
 msgid "Content not available"
 msgstr "Data tidak tersedia"
 
-#: data/server/tpl/unavailable.html:9
+#: data/server/tpl/unavailable.tpl:8
 #, python-format
 msgid ""
-"Daluang doesn't have data for <strong>%(article)s</strong> in <strong>%"
-"(language)s</strong>."
+"Daluang doesn't have data for <strong>%s</strong> in <strong>%s</strong>"
 msgstr ""
-"Daluang tidak memiliki data mengenai <strong>%(article)s</strong> dalam "
-"<strong>%(language)s</strong>."
+"Daluang tidak memiliki data mengenai <strong>%s</strong> dalam <strong>%s</"
+"strong>."
 
-#: data/server/tpl/unavailable.html:11
+#: data/server/tpl/unavailable.tpl:10
 msgid "Click here to open the online version"
 msgstr "Klik di sini untuk membuka versi online"
