@@ -22,7 +22,7 @@ class Browser:
 		self.__init_gui_dialog()
 
 		self.re_article = re.compile(r'([^/]+)/article/([^/]+)(/|$)')
-		self.re_search = re.compile(r'([^/]+)/(article|search)/([^/]+)(/|$)')
+		self.re_search = re.compile(r'([^/]+)/(article|search|special)/([^/]+)(/|$)')
 
 		self.open_external_browser = None
 

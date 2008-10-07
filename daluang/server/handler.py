@@ -114,7 +114,7 @@ class Handler:
 
 		# Language index
 		file = os.path.join(base_dir, 'languages.txt')
-		self.languages = load_languages(file)
+		self.all_languages = load_languages(file)
 
 		# Template
 		global template_dir
@@ -215,6 +215,7 @@ class Handler:
 
 	def __load_reader(self, lang):
 		"""Load reader object of data from a language."""
+
 		res = self.reader.get(lang, None)
 		if res == None:
 			self.reader[lang] = Reader(self.data[lang]['datafile'])
@@ -227,6 +228,7 @@ class Handler:
 
 	def serve_article(self, req, lang, article):
 		"""Send an article."""
+
 		if not lang in self.languages:
 			return self.serve_unavailable(req, lang, article)
 
@@ -258,7 +260,7 @@ class Handler:
 
 	def serve_unavailable(self, req, lang, article):
 		"""Show article unavailability message."""
-		if self.language.get(lang, None) == None:
+		if self.all_languages.get(lang, None) == None:
 			return self.__redirect(req, '/')
 
 		article = self.__filter_article(article)
@@ -268,7 +270,7 @@ class Handler:
 		html = template.render(
 			article=article,
 			lang=lang,
-			language=self.language[lang]
+			language=self.all_languages[lang]
 		)
 
 		self.__response(req, html)
@@ -413,7 +415,7 @@ class Handler:
 		template = self.template.get_template('all_pages.tpl')
 		html = template.render(
 			pages=pages,
-			lang=self.languages[lang],
+			lang=self.all_languages[lang],
 			code=lang
 		)
 
@@ -461,7 +463,6 @@ class DaluangHandler(BaseHTTPRequestHandler):
 				param = match.groups()
 				f(self, *param)
 				return True
-
 
 		self.send_response(404)
 
