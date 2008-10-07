@@ -4,6 +4,7 @@ import os
 import re
 import urllib
 import urlparse
+import math
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 
@@ -35,6 +36,68 @@ mime_types = {
 	'png': 'image/png'
 }
 
+class AllPages:
+	
+	def __init__(self, lang, reader):
+		self.reader = reader
+		self.lang = lang
+
+		self._prepare()
+
+		self.max_per_page = 200
+		self.max_group = 50
+
+	def get_pages(self, start=None, end=None):
+
+		print "get_pages: start=", start, " - end=", end
+
+		if not start:
+			start = 0
+		if not end:
+			end = self.total - 1
+
+		total = end - start + 1  # zero based
+
+		if total <= self.max_per_page:
+			return {
+				'type': 'titles',
+				'titles': self.titles[start:end+1]
+			}
+
+		else:
+			
+			total_groups = int(math.ceil(float(total) / self.max_per_page))
+			
+			if total_groups > self.max_group:
+				total_groups = self.max_group
+
+			num = int(total / total_groups)
+
+			groups = []
+			while start <= end:
+				e = start + num - 1
+				if e >= end:
+					e = end
+
+				groups.append({
+					'start': (start, self.titles[start]),
+					'end': (e, self.titles[e])
+				})
+				start += num
+
+			return {
+				'type': 'groups',
+				'groups': groups
+			}
+
+
+	def _prepare(self):
+		
+		(titles, total) = self.reader.get_titles()
+
+		self.total = total
+		self.titles = titles
+
 class Handler:
 	
 	def __init__(self):
@@ -46,6 +109,8 @@ class Handler:
 
 		self.parser = Parser()
 		self.cache = Cache()
+
+		self.all_pages = None
 
 		self.mime_types = {}
 
@@ -319,10 +384,14 @@ class Handler:
 			return self.__redirect(req, self.__get_main_page(lang))
 
 		reader = self.__load_reader(lang)
-	
-		# Start index
 
-		start = 0
+		if self.all_pages == None or self.all_pages.lang != lang:
+			self.all_pages = AllPages(lang, reader)
+
+		# Parse URL
+
+		start = None
+		end = None
 
 		(scheme, addr, path, params, qs, fragment) = urlparse.urlparse(req.path)
 		p = qs.split('&')
@@ -336,29 +405,18 @@ class Handler:
 
 			if key == 'start':
 				start = int(val)
+			elif key == 'end':
+				end = int(val)
 
-		# Get titles
+		pages = self.all_pages.get_pages(start, end)
 
-		limit = 100
-		(titles, total) = reader.get_titles(start=start, limit=limit)
-
-		prev_index = -1
-		if start > 0:
-			prev_index = start - limit
-			if prev_index < 0:
-				prev_index = 0
-
-		next_index = -1
-		if start + limit < total:
-			next_index = start + limit
+		# Render page
 
 		template = self.template.get_template('all_pages.tpl')
 		html = template.render(
-			titles=titles,
+			pages=pages,
 			lang=self.languages[lang],
-			code=lang,
-			prev_index=prev_index,
-			next_index=next_index
+			code=lang
 		)
 
 		return self.__response(req, html)

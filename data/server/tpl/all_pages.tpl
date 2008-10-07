@@ -5,32 +5,27 @@
 </head><body>
 <h1>All Pages - ${ lang }</h1>
 
-% if prev_index >= 0 or next_index >= 0:
-<ul class="prevnext">
-% if prev_index >= 0:
-	<li><a href="/${ code }/special/all?start=${ prev_index }">&laquo; Prev</a></li>
-% endif
-% if next_index >= 0:
-	<li><a href="/${ code }/special/all?start=${ next_index }">Next &raquo;</a></li>
-% endif
-</ul>
-% endif
+<div id="allpages" class="${ pages['type'] }">
 
+% if pages['type'] == 'titles':
 <ul>
-% for title in titles[0:100]:
+% for title in pages['titles']:
 <li><a href="/${ code }/article/${ title }/">${ title }</a></li>
 % endfor
 </ul>
-
-% if prev_index >= 0 or next_index >= 0:
-<ul class="prevnext">
-% if prev_index >= 0:
-	<li><a href="/${ code }/special/all?start=${ prev_index }">&laquo; Prev</a></li>
 % endif
-% if next_index >= 0:
-	<li><a href="/${ code }/special/all?start=${ next_index }">Next &raquo;</a></li>
-% endif
+% if pages['type'] == 'groups':
+<ul>
+% for group in pages['groups']:
+<li>
+<a href="/${ code }/special/all?start=${ group['start'][0] }&end=${ group['end'][0] }">${ group['start'][1] }</a>
+to
+<a href="/${ code }/special/all?start=${ group['start'][0] }&end=${ group['end'][0] }">${ group['end'][1] }</a>
+</li>
+% endfor
 </ul>
 % endif
+
+</div>
 
 </body></html>
