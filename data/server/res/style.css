@@ -76,4 +76,18 @@ a:hover {
 	display: inline;
 }
 
+#allpages ul {
+	list-style: none;
+	padding-left: 0px;
+}
+#allpages.groups ul {
+	text-align: center;
+}
+#allpages.titles table {
+	width: 100%;
+}
+#allpages.titles table td {
+	vertical-align: top;
+	width: 33%;
+}
 
