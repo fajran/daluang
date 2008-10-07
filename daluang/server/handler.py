@@ -49,8 +49,6 @@ class AllPages:
 
 	def get_pages(self, start=None, end=None):
 
-		print "get_pages: start=", start, " - end=", end
-
 		if not start:
 			start = 0
 		if not end:

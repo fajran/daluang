@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>All Pages - ${ lang } - Daluang</title>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>${_('All Pages')} - ${ lang } - Daluang</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/+res/style.css"/>
 </head><body>
-<h1>All Pages - ${ lang }</h1>
+<h1>${_('All Pages')} - ${ lang }</h1>
 
 <div id="allpages" class="${ pages['type'] }">
 
@@ -38,7 +38,7 @@
 	% for group in pages['groups']:
 	<li>
 	<a href="/${ code }/special/all?start=${ group['start'][0] }&end=${ group['end'][0] }">${ group['start'][1] }</a>
-	to
+	${_('to')}
 	<a href="/${ code }/special/all?start=${ group['start'][0] }&end=${ group['end'][0] }">${ group['end'][1] }</a>
 	</li>
 	% endfor

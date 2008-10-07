@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/+res/style.css"/>
 </head><body>
-<h1>Search result</h1>
+<h1>${_('Search result')}</h1>
 
 % if result:
 
-<p>Search result for <strong>${ keywords }</strong>:</p>
+<p>${_("Search result for <strong>%s</strong>") % keywords}:</p>
 
 <ul>
 % for item in result:
@@ -17,7 +17,7 @@
 
 % else:
 
-<p>Daluang could not found anything about <strong>${ keywords }</strong>.</p>
+<p>${_("Daluang could not found anything about <strong>%s</strong>") % keywords}</strong>.</p>
 
 % endif
 
