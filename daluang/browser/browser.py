@@ -124,7 +124,7 @@ class Browser:
 		self.browser.load_url(self.base_addr)
 
 	def __on_extra_clicked(self, src):
-		self.menu_extra.popup(None, None, None, 1, 0)
+		self.menu_extra.popup(None, None, self.__get_menu_extra_position, 1, 0)
 
 	def __on_article_changed(self, src):
 		text = src.get_text()
@@ -184,6 +184,15 @@ class Browser:
 		self.dialog_external.hide()
 
 	# Misc
+
+	def __get_menu_extra_position(self, data):
+		(wx, wy, ww, wh, wd) = self.window.window.get_geometry()
+		(bw, bh) = self.btn_extra.size_request()
+
+		x = wx + ww - bw;
+		y = wy + bh;
+
+		return (x, y, True)
 
 	def __open_external_browser(self, uri):
 		
