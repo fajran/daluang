@@ -90,11 +90,34 @@ class AllPages:
 
 
 	def _prepare(self):
-		
-		(titles, total) = self.reader.get_titles()
 
-		self.total = total
+		# Get namespaces
+		
+		self.namespaces = []
+		namespaces = self.reader.get_namespaces()
+		for k in namespaces:
+			self.namespaces.append(namespaces[k].lower())
+		
+		# Get titles
+
+		(titles, total) = self.reader.get_titles()
+		titles = filter(self._filter_title, titles)
+
+		# Filter titles
+
+		self.total = len(titles)
 		self.titles = titles
+
+	def _filter_title(self, title):
+
+		title = str(title)
+		pos = title.find(":")
+
+		if pos == -1:
+			return True
+		else:
+			return title[:pos].lower() not in self.namespaces
+
 
 class Handler:
 	
