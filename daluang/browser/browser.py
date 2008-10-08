@@ -6,6 +6,7 @@ import gtkmozembed
 import sys
 import urllib
 import webbrowser
+import pickle
 import os
 import re
 
@@ -20,6 +21,7 @@ class Browser:
 
 		self.__init_gui_browser()
 		self.__init_gui_dialog()
+		self.__init_meta()
 
 		self.re_article = re.compile(r'([^/]+)/article/([^/]+)(/|$)')
 		self.re_search = re.compile(r'([^/]+)/(article|search|special)/([^/]+)(/|$)')
@@ -75,6 +77,22 @@ class Browser:
 		self.dialog_external = glade.get_widget('dialog')
 		self.dialog_external_url = glade.get_widget('lbl_url')
 		self.dialog_external.connect("close", self.__on_dialog_external_closed)
+
+	def __init_meta(self):
+		self.meta = {}
+
+		# Get languages
+
+		f = urllib.urlopen("%s/+meta/languages" % self.base_addr)
+		p = f.read()
+		obj = pickle.loads(p)
+
+		self.meta['languages'] = obj
+
+		self.languages = []
+		for lang in obj:
+			self.languages.append(lang[0])
+		
 
 	# Signals 
 	def __on_window_destroy(self, src):
@@ -157,7 +175,9 @@ class Browser:
 		# Toggle open and search button
 
 		match = self.re_search.match(path)
+		lang = None
 		if match:
+			lang = match.group(1)
 			status = True
 		else:
 			status = False
@@ -166,7 +186,7 @@ class Browser:
 		self.btn_search.set_sensitive(status)
 		self.mi_online.set_sensitive(status)
 
-		if path == '':
+		if (path == "") or (lang not in self.languages):
 			self.mi_all_pages.set_sensitive(False)
 		else:
 			self.mi_all_pages.set_sensitive(True)

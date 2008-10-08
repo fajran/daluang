@@ -5,6 +5,7 @@ import re
 import urllib
 import urlparse
 import math
+import pickle
 
 from BaseHTTPServer import BaseHTTPRequestHandler
 
@@ -160,6 +161,16 @@ class Handler:
 
 		return True
 
+	def __response_object(self, req, obj):
+		"""Send HTTP response containing Pickled Python object."""
+		req.send_response(200)
+		req.send_header('content-type', "text/plain")
+		req.end_headers()
+
+		req.wfile.write(pickle.dumps(obj))
+
+		return True
+
 	def __load_mime(self):
 		"""Load mime types."""
 		if not os.path.exists('/etc/mime.types'):
@@ -248,6 +259,19 @@ class Handler:
 		self.parser.add_reader(self.reader[lang], lang)
 
 		return res
+
+	def serve_meta(self, req, id):
+		
+		if id == "languages":
+			obj = []
+			for lang in self.languages:
+				obj.append((lang,))
+
+			self.__response_object(req, obj)
+
+		else:
+			self.__response(req, "", code=404)
+			
 
 	def serve_article(self, req, lang, article):
 		"""Send an article."""
@@ -453,7 +477,8 @@ class DaluangHandler(BaseHTTPRequestHandler):
 	def __init(self):
 
 		urlpatterns = (
-			(r'^/\+res/(?P<path>.*)$', self.handler.serve_static),
+			(r'^/\+meta/(.+)$', self.handler.serve_meta),
+			(r'^/\+res/(.+)$', self.handler.serve_static),
 			(r'^/([^/]+)/article/(.+)?$', self.handler.serve_article),
 			(r'^/([^/]+)/search/(.+)$', self.handler.serve_search),
 			(r'^/([^/]+)/special/(.+)$', self.handler.serve_special),
@@ -488,9 +513,7 @@ class DaluangHandler(BaseHTTPRequestHandler):
 				return True
 
 		self.send_response(404)
-
 		self.send_header('Content-type', 'text/html')
 		self.end_headers()
-
 		self.wfile.write("<strong>File not found</strong>")
 
