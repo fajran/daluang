@@ -1,12 +1,18 @@
-daluang trunk - Fri, 25 Apr 2008 21:15:39 +0200
+daluang trunk - Wed, 08 Oct 2008 14:41:44 +0200
 
   * Update browser.glade
+    - Reorganize toolbar
+    - Add special button that shows a popup menu containing further actions
   * Fix typos (ISSUE #26)
   * Recognize unavaliable pages (ISSUE #20)
   * Add version information in data file (ISSUE #22)
   * No data installed message (ISSUE #27)
   * Sorted language list
   * Open external browser confirmation (ISSUE #28)
+  * Show all available pages (ISSUE #29)
+  * Remove Django and replace it with python's own BaseHTTPServer 
+    (ISSUE #31, ISSUE #32)
+  * Use Mako for templating
 
 daluang 0.2 - Tue, 08 Apr 2008 00:06:38 +0200
 
