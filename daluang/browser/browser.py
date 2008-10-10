@@ -206,7 +206,8 @@ class Browser:
 	# Misc
 
 	def __get_menu_extra_position(self, data):
-		(wx, wy, ww, wh, wd) = self.window.window.get_geometry()
+		(wx, wy) = self.window.window.get_origin()
+		(ww, wh) = self.window.get_size()
 		(bw, bh) = self.btn_extra.size_request()
 
 		x = wx + ww - bw;
