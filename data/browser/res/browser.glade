@@ -84,15 +84,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="txt_article">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip" translatable="yes">Article title</property>
-                <accelerator key="L" modifiers="GDK_CONTROL_MASK" signal="grab_focus"/>
-              </widget>
-              <packing>
-                <property name="position">4</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <widget class="GtkButton" id="btn_ok">

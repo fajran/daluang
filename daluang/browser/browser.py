@@ -12,6 +12,94 @@ import re
 
 from daluang import Parser, Reader, Locator, Config
 
+class AddressBar(gtk.VBox):
+
+	def __init__(self, label=""):
+		gtk.VBox.__init__(self)
+	
+		self.set_border_width(5)
+
+		hbox = gtk.HBox()
+		self.pack_start(hbox, padding=0)
+
+		self.label = gtk.Label(label)
+		self.label.set_alignment(0, 0.5)
+		self.label.set_padding(5, 0)
+
+		self.eb = gtk.EventBox()
+		self.eb.add(self.label)
+		hbox.pack_start(self.eb, expand=False, padding=0)
+
+		self.entry = gtk.Entry()
+		self.entry.set_has_frame(False)
+		hbox.pack_start(self.entry, expand=True, padding=3)
+
+		self.set_app_paintable(True)
+		self.connect("expose-event", self.__paint)
+
+		self.entry.connect("focus-in-event", self.__on_entry_focus_changed)
+		self.entry.connect("focus-out-event", self.__on_entry_focus_changed)
+
+		self.set_label_text(label)
+
+	def set_label_text(self, text):
+		if text == None:
+			text = ""
+			self.eb.hide()
+		else:
+			self.eb.show()
+
+		w = self.allocation.width
+		h = self.allocation.height
+		self.set_size_request(w, h)
+		self.label.set_text(text)
+		self.set_size_request(-1, -1)
+
+	def show_all(self):
+		gtk.VBox.show_all(self)
+		if not self.label.get_text():
+			self.eb.hide()
+
+	def get_label_text(self):
+		return self.get_text()
+
+	def set_entry_text(self, text):
+		self.entry.set_text(text)
+
+	def get_entry_text(self):
+		return self.entry.get_text()
+
+	def __on_entry_focus_changed(self, sender, data):
+		self.queue_draw()
+
+	def __paint(self, w, paint):
+
+		w.style.paint_flat_box(
+			w.window,
+			self.entry.state,
+			gtk.SHADOW_NONE,
+			None,
+			self.entry,
+			"entry_bg",
+			w.allocation.x,
+			w.allocation.y+1,
+			w.allocation.width,
+			w.allocation.height-2)
+
+		w.style.paint_shadow(
+			w.window,
+			gtk.STATE_NORMAL,
+			gtk.SHADOW_IN,
+			None,
+			self.entry,
+			"entry",
+			w.allocation.x,
+			w.allocation.y+1,
+			w.allocation.width,
+			w.allocation.height-2)
+
+		return False
+
 class Browser:
 	def __init__(self, base_addr):
 		self.base_addr = base_addr.strip(' /')
@@ -39,7 +127,6 @@ class Browser:
 		self.btn_ok = glade.get_widget("btn_ok")
 		self.btn_search = glade.get_widget("btn_search")
 		self.btn_home = glade.get_widget("btn_home")
-		self.txt_article = glade.get_widget("txt_article")
 		self.btn_extra = glade.get_widget("btn_extra")
 		self.menu_extra = glade.get_widget("menu_extra")
 
@@ -53,6 +140,14 @@ class Browser:
 
 		self.browser.show()
 		self.browser.load_url(self.base_addr)
+
+		hbox = glade.get_widget("hbox")
+
+		self.address_bar = AddressBar()
+		hbox.pack_start(self.address_bar, expand=True, fill=True)
+		hbox.reorder_child(self.address_bar, 4)
+		self.address_bar.show_all()
+		self.txt_article = self.address_bar.entry
 
 		self.window.connect("destroy", self.__on_window_destroy)
 		self.btn_back.connect("clicked", self.__on_back_clicked)
@@ -191,6 +286,7 @@ class Browser:
 		else:
 			self.mi_all_pages.set_sensitive(True)
 
+		self.address_bar.set_label_text(lang)
 
 	def __on_browser_title_changed(self, src, data=None):
 		title = self.browser.get_title()
