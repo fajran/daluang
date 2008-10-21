@@ -305,8 +305,9 @@ class Browser:
 		(wx, wy) = self.window.window.get_origin()
 		(ww, wh) = self.window.get_size()
 		(bw, bh) = self.btn_extra.size_request()
+		(mw, mh) = self.menu_extra.size_request()
 
-		x = wx + ww - bw;
+		x = wx + ww - mw;
 		y = wy + bh;
 
 		return (x, y, True)
