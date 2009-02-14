@@ -1,0 +1,6 @@
+﻿#REDIRECT [[United States]]
+
+#REDIRECT [[United States#History]] will redirect to the 
+[[United States]] page, to the History 
+section, if it exists 
+

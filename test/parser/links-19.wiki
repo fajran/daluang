@@ -1,0 +1,4 @@
+﻿Special [[WP:As of|As of]] links 
+like {{As of|year}}
+needing future maintenance
+

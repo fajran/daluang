@@ -1,0 +1,11 @@
+﻿[[Wikipedia:Manual of Style#Italics]] 
+is a link to a section within another page.
+
+[[#Links and URLs]] is a link
+to another section on the 
+current page.
+
+[[Wikipedia:Manual of Style#Italics|Italics]] 
+is a piped link to a section within 
+another page.
+

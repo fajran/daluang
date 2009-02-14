@@ -1,0 +1,9 @@
+﻿'''What links here''' and
+'''Related changes'''
+pages can be linked as:
+[[Special:Whatlinkshere/
+Wikipedia:How to edit a page]]
+and
+[[Special:Recentchangeslinked/
+Wikipedia:How to edit a page]]
+

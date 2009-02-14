@@ -1,0 +1,3 @@
+﻿A picture resized to 30 pixels...
+[[Image:wiki.png|30 px]]
+

@@ -1,0 +1,12 @@
+﻿Three ways to link to
+external (non-wiki) sources:
+# Bare URL:
+http://en.wikipedia.org/
+(bad style)
+# Unnamed link:
+[http://en.wikipedia.org/]
+(only used within article
+body for footnotes)
+# Named link:
+[http://en.wikipedia.org Wikipedia]
+

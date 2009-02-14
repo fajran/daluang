@@ -1,0 +1,4 @@
+﻿Linking directly to the description page
+of an image:
+[[:Image:wiki.png]]
+

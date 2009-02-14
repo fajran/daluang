@@ -1,0 +1,4 @@
+﻿Linking directly to an image
+without displaying it:
+[[:media:wiki.png|Image of the jigsaw globe logo]]
+

@@ -1,0 +1,4 @@
+﻿Floating to the right side of the page 
+using the ''frame'' attribute and a caption:
+[[Image:wiki.png|frame|Wikipedia Encyclopedia]]
+

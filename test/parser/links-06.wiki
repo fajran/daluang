@@ -1,0 +1,15 @@
+Automatically hide stuff
+in parentheses:
+[[kingdom (biology)|]].
+
+Automatically hide namespace: 
+[[Wikipedia:Village pump|]].
+
+Or both:
+[[Wikipedia:
+Manual of Style (headings)|]]
+
+But not:
+[[Wikipedia:
+Manual of Style#Links|]]
+

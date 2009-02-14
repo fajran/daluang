@@ -1,0 +1,6 @@
+﻿A user's '''Contributions''' page
+can be linked as:
+[[Special:Contributions/UserName]]
+or
+[[Special:Contributions/192.0.2.0]]
+

@@ -1,0 +1,16 @@
+﻿Linking to other wikis:
+# [[InterWiki]] link:
+[[Wiktionary:Hello]]
+# Interwiki link without prefix:
+[[Wiktionary:Hello|]]
+# Named interwiki link:
+[[Wiktionary:Hello|
+Wiktionary definition 
+of 'Hello']]
+
+Linking to another
+language's wiktionary:
+# [[Wiktionary:fr:bonjour]]
+# [[Wiktionary:fr:bonjour|bonjour]]
+# [[Wiktionary:fr:bonjour|]]
+

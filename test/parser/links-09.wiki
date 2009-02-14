@@ -1,0 +1,14 @@
+﻿The character '''tilde''' (~) is used 
+when adding a comment to a Talk page. 
+You should sign your comment by 
+appending four tildes (~~~~)
+to the comment so as to add your 
+user name plus date/time:
+: ~~~~
+Adding three tildes (~~~) will add 
+just your user name:
+: ~~~
+and adding five tildes (~~~~~) gives 
+the date/time alone:
+: ~~~~~
+

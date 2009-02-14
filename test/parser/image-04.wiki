@@ -1,0 +1,4 @@
+﻿Floating to the right side of the page 
+using the ''thumb'' attribute and a caption:
+[[Image:wiki.png|thumb|Wikipedia Encyclopedia]]
+

@@ -1,0 +1,3 @@
+﻿With alternative text:
+[[Image:wiki.png|Wikipedia, The Free Encyclopedia.]]
+
